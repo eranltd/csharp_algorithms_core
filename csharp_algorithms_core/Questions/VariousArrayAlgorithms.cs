@@ -8,8 +8,6 @@ namespace InterView.Questions
 {
 
     //https://www.geeksforgeeks.org/print-all-subarrays-with-0-sum/
-    //https://www.geeksforgeeks.org/sum-of-xor-of-all-subarrays/
-    //https://www.geeksforgeeks.org/sum-of-all-subarrays/
     //https://www.geeksforgeeks.org/count-of-subarrays-with-sum-at-least-k/
     //https://www.geeksforgeeks.org/number-subarrays-sum-less-k/
     //https://www.geeksforgeeks.org/find-number-subarrays-even-sum/
@@ -17,8 +15,15 @@ namespace InterView.Questions
     //https://www.geeksforgeeks.org/generating-subarrays-using-recursion/
     //https://www.geeksforgeeks.org/sum-of-minimum-elements-of-all-subarrays/
     //https://www.geeksforgeeks.org/number-of-subarrays-with-gcd-equal-to-1/
+    //https://www.geeksforgeeks.org/count-subarrays-with-same-even-and-odd-elements/
+    //https://www.geeksforgeeks.org/count-the-number-of-contiguous-increasing-and-decreasing-subsequences-in-a-sequence/
+    //https://www.geeksforgeeks.org/count-of-non-decreasing-arrays-of-length-n-formed-with-values-in-range-l-to-r/
+    //https://www.geeksforgeeks.org/find-the-count-of-strictly-decreasing-subarrays/
+    //https://www.geeksforgeeks.org/number-subarrays-sum-less-k/
 
+    //https://www.programcreek.com/2012/11/top-10-algorithms-for-coding-interview/
 
+    //https://www.geeksforgeeks.org/window-sliding-technique/
 
     public static class VariousArrayAlgorithms
     {
@@ -31,19 +36,76 @@ namespace InterView.Questions
 
             int[] localMinimaArr = { 9, 6, 3, 14, 5, 7, 4 };
             FindLocalMinimaBinarySearch(localMinimaArr);
+            Console.WriteLine();
 
-            Console.WriteLine("Print all subarrays with 0 sum");
 
+            Console.WriteLine("************************************************************");
             //int[] SubArrayZero = { 6, 3, -1, -3, 4, -2, 2, 4, 6, -12, -7 };
 
-            int[] SubArrayZero = { 2, -2 };
+            int[] SubArrayZero = { 6,3,-9,-2,2,4,-4 };
+
+            SubArrayZero.ToList().ForEach(item => Console.Write($"[{item}] "));
+            Console.WriteLine("Print all subarrays with 0 sum");
+
+            Console.WriteLine("Print all subarrays with 0 sum - O(n^2)");
+
             PrintAllSubarraysZeroSum(SubArrayZero);
+
+            Console.WriteLine("Print all subarrays with 0 sum - Hashing Algorithm");
+
+            PrintAllSubarraysZeroSumHashing(SubArrayZero);
+            Console.WriteLine("************************************************************");
+
+            Console.WriteLine($"countSubarray with  sum < 10  = {countSubarray(SubArrayZero,10)}");
+
+
+
 
         }
 
 
+        //solve using 'slideing window'
+        static int countSubarray(int[] arr,
+                              int maxSum)
+        {
+            int n = arr.Length;
+            int start = 0, end = 0;
+            int count = 0, sum = arr[0];
 
+            while (start < n && end < n)
+            {
+                // If sum is less than k, 
+                // move end by one position. 
+                // Update count and sum 
+                // accordingly. 
+                if (sum < maxSum)
+                {
+                    end++;
 
+                    if (end >= start)
+                        count += end - start;
+
+                    // For last element, 
+                    // end may become n. 
+                    if (end < n)
+                        sum += arr[end];
+                }
+
+                // If sum is greater than or 
+                // equal to k, subtract 
+                // arr[start] from sum and 
+                // decrease sliding window by 
+                // moving start by one position 
+                else
+                {
+                    sum -= arr[start];
+                    start++;
+                }
+            }
+
+            return count;
+        
+        }
 
 
         static void FindLocalMinima(int[] arr)
@@ -127,7 +189,82 @@ namespace InterView.Questions
 
         static void PrintAllSubarraysZeroSumHashing(int[] arr)
         {
-            List<int[]> subArrays = GetSubArrays(arr);
+
+            // create an empty map  
+            Dictionary<int, List<int>> TrackingSubSumArray = new Dictionary<int, List<int>>();
+
+            // create an empty vector of pairs to store  
+            // subarray starting and ending index  
+            List<(int first,int second)> SubArraysFoundByIndex = new List<(int first, int second)>();
+
+            // Maintains sum of elements so far 
+            int sum = 0;
+
+
+            for (int i = 0; i < arr.Length; i++)
+            {
+                // add current element to sum  
+                sum += arr[i];
+
+                // if sum is 0, we found a subarray starting  
+                // from index 0 and ending at index i  
+                if (sum == 0)
+                    SubArraysFoundByIndex.Add((0,i));
+
+
+
+
+
+                //find sub-arrays
+                List<int> al = new List<int>(); //
+
+                // If sum already exists in the map there exists  
+                // at-least one subarray ending at index i with  
+                // 0 sum  
+
+
+                if (TrackingSubSumArray.ContainsKey(sum))
+                {
+                    // TrackingSubSumArray[sum] stores starting index  
+                    // of all subarrays
+
+
+                    al = TrackingSubSumArray[sum];
+
+
+
+                    for (int it = 0; it < al.Count; it++)
+                    {
+                        SubArraysFoundByIndex.Add((al[it] + 1, i));
+                    }
+
+                }
+
+
+
+                al.Add(i);
+                if (TrackingSubSumArray.ContainsKey(sum))
+                    TrackingSubSumArray[sum] = al;
+                else
+                    TrackingSubSumArray.Add(sum, al);
+
+
+
+            }
+
+            // if we did not find any subarray with 0 sum,  
+            // then subarray does not exists  
+            if (SubArraysFoundByIndex.Count == 0)
+                Console.WriteLine("No subarray exists");
+            else
+                SubArraysFoundByIndex.ForEach(p => Console.WriteLine("Subarray found from Index " +
+                               p.first + " to " + p.second));
+
+
+            
+            ;
+
+
         }
 
         private static List<int[]> GetSubArrays(int[] arr)
@@ -185,7 +322,7 @@ namespace InterView.Questions
 
         }
 
-
+        
 
     }
 }
