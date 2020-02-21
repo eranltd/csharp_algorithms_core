@@ -5,4 +5,18 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Questions\855whq9t.h67~" />
+    <None Remove="Questions\aw8t41ja.80p~" />
+    <None Remove="Questions\1kmchmyn.wpg~" />
+    <None Remove="Questions\9pdyreao.mel~" />
+    <None Remove="Questions\3x40steu.aj7~" />
+    <None Remove="Questions\3f7cuth1.007~" />
+    <None Remove="Questions\05hwrdx1.w0b~" />
+    <None Remove="Questions\7j2m96kb.il9~" />
+    <None Remove="Questions\2ixxpu1b.kq4~" />
+    <None Remove="Questions\6zo9t7it.q2y~" />
+    <None Remove="Questions\85rf8hyu.c69~" />
+    <None Remove="Questions\bpv3s3so.539~" />
+  </ItemGroup>
 </Project>

@@ -22,18 +22,29 @@ namespace InterView.Questions
 
     public static class VariousArrayAlgorithms
     {
-       
+
 
         public static void Run()
         {
             Console.WriteLine("VariousArrayAlgorithms");
             Console.WriteLine("Find a local minima in an array");
-          
-            int[] arr = { 9, 6, 3, 14, 5, 7, 4 };
-            FindLocalMinimaBinarySearch(arr);
 
+            int[] localMinimaArr = { 9, 6, 3, 14, 5, 7, 4 };
+            FindLocalMinimaBinarySearch(localMinimaArr);
+
+            Console.WriteLine("Print all subarrays with 0 sum");
+
+            //int[] SubArrayZero = { 6, 3, -1, -3, 4, -2, 2, 4, 6, -12, -7 };
+
+            int[] SubArrayZero = { 2, -2 };
+            PrintAllSubarraysZeroSum(SubArrayZero);
 
         }
+
+
+
+
+
 
         static void FindLocalMinima(int[] arr)
         {
@@ -54,7 +65,7 @@ namespace InterView.Questions
 
         }
 
-        public static int localMinUtil(int[] arr, int low,
+        static int localMinUtil(int[] arr, int low,
                                    int high, int n)
         {
             // Find index of middle element 
@@ -85,5 +96,96 @@ namespace InterView.Questions
             localMinimaIndex = localMinUtil(arr, 0, n - 1, n);
             Console.WriteLine($"Local Minima Found at arr[{localMinimaIndex}] = {arr[localMinimaIndex]}");
         }
+
+
+
+
+        //A simple solution is to consider all subarrays one by one and check if sum of every subarray is equal to 0 or not. The complexity of this solution would be O(n^2).
+        static void PrintAllSubarraysZeroSum(int[] arr)
+        {
+            //find which sub-array sum is zero
+            //List<int[]> subArrays = GetSubArrays(arr);
+            List<int[]> sub_arrays = new List<int[]>();
+
+            GetSubArraysRecursive(ref sub_arrays, arr,0,0);
+
+            //find which sub-array sum is zero
+            foreach (var subArray in sub_arrays)
+            {
+                int sum = subArray.Sum();
+                if (sum == 0)
+                {
+                    Console.WriteLine();
+                    Console.Write("Found Sub-Array with sum = 0 : ");
+                    subArray.ToList().ForEach(item => Console.Write($"[{item}] "));
+                    Console.WriteLine();
+
+                }
+            }
+
+        }
+
+        static void PrintAllSubarraysZeroSumHashing(int[] arr)
+        {
+            List<int[]> subArrays = GetSubArrays(arr);
+        }
+
+        private static List<int[]> GetSubArrays(int[] arr)
+        {
+            List<int[]> sub_arrays = new List<int[]>();
+
+            int arrLength = arr.Length;
+
+            for(int i=0;i <arrLength;i++)//starting point
+            {
+                for(int j=i;j< arrLength; j++)//end point
+                {
+                    List<int> tempArr = new List<int>();
+                    for (int k=i;k<=j;k++)//iterating on array
+                    {
+                        tempArr.Add(arr[k]);
+
+                    }
+                    sub_arrays.Add(tempArr.ToArray());
+                }
+
+            }
+
+
+
+
+
+            return sub_arrays;
+        }
+
+        private static void GetSubArraysRecursive(ref List<int[]> subArrays, int[] arr, int start, int end)
+        {
+            if (end == arr.Length )
+                return;
+
+
+            //start from 0 and increment end point by 1 till reacting end
+            else if (start > end)
+                GetSubArraysRecursive(ref subArrays, arr, 0, end + 1);
+
+            else
+            {
+                //between start and end -> prepare sub-array
+                List<int> tempArr = new List<int>();
+
+                for (int i = start; i <= end; i++)
+                {
+                    tempArr.Add(arr[i]);
+                }
+                subArrays.Add(tempArr.ToArray());
+                GetSubArraysRecursive(ref subArrays, arr, start + 1, end);
+            }
+
+
+
+        }
+
+
+
     }
 }
