@@ -27,87 +27,41 @@ namespace InterView.Questions
 
     public static class VariousArrayAlgorithms
     {
-
-
         public static void Run()
         {
             Console.WriteLine("VariousArrayAlgorithms");
-            Console.WriteLine("Find a local minima in an array");
-
-            int[] localMinimaArr = { 9, 6, 3, 14, 5, 7, 4 };
-            FindLocalMinimaBinarySearch(localMinimaArr);
-            Console.WriteLine();
-
+            //Console.WriteLine("Find a local minima in an array");
+            //int[] localMinimaArr = { 9, 6, 3, 14, 5, 7, 4 };
+            //FindLocalMinimaBinarySearch(localMinimaArr);
+            //Console.WriteLine();
+            //Console.WriteLine("************************************************************");
+            ////int[] SubArrayZero = { 6, 3, -1, -3, 4, -2, 2, 4, 6, -12, -7 };
+            //int[] SubArrayZero = { 6,3,-9,-2,2,4,-4 };
+            //SubArrayZero.ToList().ForEach(item => Console.Write($"[{item}] "));
+            //Console.WriteLine("Print all subarrays with 0 sum");
+            //Console.WriteLine("Print all subarrays with 0 sum - O(n^2)");
+            //PrintAllSubarraysZeroSum(SubArrayZero);
+            //Console.WriteLine("Print all subarrays with 0 sum - Hashing Algorithm");
+            //PrintAllSubarraysZeroSumHashing(SubArrayZero);
+            //Console.WriteLine("************************************************************");
+            //Console.WriteLine($"countSubarray with  sum < 10  = {countSubarray(SubArrayZero,10)}");
 
             Console.WriteLine("************************************************************");
-            //int[] SubArrayZero = { 6, 3, -1, -3, 4, -2, 2, 4, 6, -12, -7 };
-
-            int[] SubArrayZero = { 6,3,-9,-2,2,4,-4 };
-
-            SubArrayZero.ToList().ForEach(item => Console.Write($"[{item}] "));
-            Console.WriteLine("Print all subarrays with 0 sum");
-
-            Console.WriteLine("Print all subarrays with 0 sum - O(n^2)");
-
-            PrintAllSubarraysZeroSum(SubArrayZero);
-
-            Console.WriteLine("Print all subarrays with 0 sum - Hashing Algorithm");
-
-            PrintAllSubarraysZeroSumHashing(SubArrayZero);
-            Console.WriteLine("************************************************************");
-
-            Console.WriteLine($"countSubarray with  sum < 10  = {countSubarray(SubArrayZero,10)}");
-
-
-
-
-        }
-
-
-        //solve using 'slideing window'
-        static int countSubarray(int[] arr,
-                              int maxSum)
-        {
+            Console.WriteLine($"bruteforce -> get max sum of sub-array ");
+            int[] arr = { 1, 4, 2, 10, 2, 3, 1,
+                      0, 20 };
+            int k = 4;
             int n = arr.Length;
-            int start = 0, end = 0;
-            int count = 0, sum = arr[0];
+            Console.WriteLine(maxSum(arr, n, k));
 
-            while (start < n && end < n)
-            {
-                // If sum is less than k, 
-                // move end by one position. 
-                // Update count and sum 
-                // accordingly. 
-                if (sum < maxSum)
-                {
-                    end++;
 
-                    if (end >= start)
-                        count += end - start;
+            Console.WriteLine($"sliding window -> get max sum of sub-array ");
+            Console.WriteLine(MaxSumSlidingWindow(arr, n, k));
 
-                    // For last element, 
-                    // end may become n. 
-                    if (end < n)
-                        sum += arr[end];
-                }
-
-                // If sum is greater than or 
-                // equal to k, subtract 
-                // arr[start] from sum and 
-                // decrease sliding window by 
-                // moving start by one position 
-                else
-                {
-                    sum -= arr[start];
-                    start++;
-                }
-            }
-
-            return count;
-        
         }
 
 
+        #region FindLocalMinima
         static void FindLocalMinima(int[] arr)
         {
             int localMinimaIndex = 0;
@@ -117,7 +71,7 @@ namespace InterView.Questions
                 int right = i + 1;
                 if (left > 0 && right < arr.Length)
                 {
-                    if (arr[left] > arr[i] && arr[right]> arr[i])
+                    if (arr[left] > arr[i] && arr[right] > arr[i])
                         localMinimaIndex = i;
                     break;
                 }
@@ -158,9 +112,50 @@ namespace InterView.Questions
             localMinimaIndex = localMinUtil(arr, 0, n - 1, n);
             Console.WriteLine($"Local Minima Found at arr[{localMinimaIndex}] = {arr[localMinimaIndex]}");
         }
+        #endregion
 
+        #region sub-arrays
+        //solve using 'sliding window' count number of subarrays sum < maxSum
+        static int countSubarray(int[] arr, int maxSum)
+        {
+            int n = arr.Length;
+            int start = 0, end = 0;
+            int count = 0, sum = arr[0];
 
+            while (start < n && end < n)
+            {
+                // If sum is less than k, 
+                // move end by one position. 
+                // Update count and sum 
+                // accordingly. 
+                if (sum < maxSum)
+                {
+                    end++;
 
+                    if (end >= start)
+                        count += end - start;
+
+                    // For last element, 
+                    // end may become n. 
+                    if (end < n)
+                        sum += arr[end];
+                }
+
+                // If sum is greater than or 
+                // equal to k, subtract 
+                // arr[start] from sum and 
+                // decrease sliding window by 
+                // moving start by one position 
+                else
+                {
+                    sum -= arr[start];
+                    start++;
+                }
+            }
+
+            return count;
+
+        }
 
         //A simple solution is to consider all subarrays one by one and check if sum of every subarray is equal to 0 or not. The complexity of this solution would be O(n^2).
         static void PrintAllSubarraysZeroSum(int[] arr)
@@ -169,7 +164,7 @@ namespace InterView.Questions
             //List<int[]> subArrays = GetSubArrays(arr);
             List<int[]> sub_arrays = new List<int[]>();
 
-            GetSubArraysRecursive(ref sub_arrays, arr,0,0);
+            GetSubArraysRecursive(ref sub_arrays, arr, 0, 0);
 
             //find which sub-array sum is zero
             foreach (var subArray in sub_arrays)
@@ -195,7 +190,7 @@ namespace InterView.Questions
 
             // create an empty vector of pairs to store  
             // subarray starting and ending index  
-            List<(int first,int second)> SubArraysFoundByIndex = new List<(int first, int second)>();
+            List<(int first, int second)> SubArraysFoundByIndex = new List<(int first, int second)>();
 
             // Maintains sum of elements so far 
             int sum = 0;
@@ -209,7 +204,7 @@ namespace InterView.Questions
                 // if sum is 0, we found a subarray starting  
                 // from index 0 and ending at index i  
                 if (sum == 0)
-                    SubArraysFoundByIndex.Add((0,i));
+                    SubArraysFoundByIndex.Add((0, i));
 
 
 
@@ -261,7 +256,7 @@ namespace InterView.Questions
                                p.first + " to " + p.second));
 
 
-            
+
             ;
 
 
@@ -273,12 +268,12 @@ namespace InterView.Questions
 
             int arrLength = arr.Length;
 
-            for(int i=0;i <arrLength;i++)//starting point
+            for (int i = 0; i < arrLength; i++)//starting point
             {
-                for(int j=i;j< arrLength; j++)//end point
+                for (int j = i; j < arrLength; j++)//end point
                 {
                     List<int> tempArr = new List<int>();
-                    for (int k=i;k<=j;k++)//iterating on array
+                    for (int k = i; k <= j; k++)//iterating on array
                     {
                         tempArr.Add(arr[k]);
 
@@ -297,7 +292,7 @@ namespace InterView.Questions
 
         private static void GetSubArraysRecursive(ref List<int[]> subArrays, int[] arr, int start, int end)
         {
-            if (end == arr.Length )
+            if (end == arr.Length)
                 return;
 
 
@@ -322,7 +317,56 @@ namespace InterView.Questions
 
         }
 
-        
+
+        // Returns maximum sum in a  subarray of size k. 
+
+        #endregion
+        static int maxSum(int[] arr, int n,int k)
+        {
+            int maxSum = 0;
+            // Consider all blocks starting 
+            // with i. 
+
+            for(int i=0; i < n-k+1 ;i++)
+            {
+                int current_sum = 0;
+                for (int j = 0; j < k; j++)
+                    current_sum = current_sum + arr[i + j];
+
+                // Update result if required. 
+                maxSum = Math.Max(current_sum,maxSum);
+            }
+            return maxSum;
+
+        }
+
+        static int MaxSumSlidingWindow(int[] arr,int n,int k)
+        {
+            int maxSum = 0;
+
+            if (n < k)
+                return -1;
+
+            int window_sum = 0;
+            int start = 0;
+
+            //get initial sum size of first k elements.
+            for (int i = 0; i < k; i++)
+            {
+                window_sum += arr[i];
+            }
+
+            maxSum = window_sum;
+            for (int i=k ; i<n; i++)
+            {
+                window_sum += arr[i];
+                window_sum -= arr[start++];
+                maxSum = Math.Max(window_sum, maxSum);
+
+            }
+            return maxSum;
+        }
+
 
     }
 }
