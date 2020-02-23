@@ -31,8 +31,10 @@ namespace InterView
             //PermutationsOfString.Run();
             //Sortanarrayof0s1sand2s.Run();
             //EvenNumbersASCOddNumbersDESC.Run();
-            //VariousAlgorithms.Run();
             
+            
+            
+            VariousAlgorithms.Run();
             VariousArrayAlgorithms.Run();
             Console.ReadLine();
         }

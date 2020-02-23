@@ -1,4 +1,5 @@
-﻿using System;
+﻿using InterView.DataStructres;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -27,9 +28,12 @@ namespace InterView.Questions
 
     public static class VariousArrayAlgorithms
     {
+
+        public static void PrintArr(int[] arr) { Console.WriteLine(); arr.ToList().ForEach(item => Console.Write($"[{item}] ")); Console.WriteLine(); }
         public static void Run()
         {
             Console.WriteLine("VariousArrayAlgorithms");
+
             //Console.WriteLine("Find a local minima in an array");
             //int[] localMinimaArr = { 9, 6, 3, 14, 5, 7, 4 };
             //FindLocalMinimaBinarySearch(localMinimaArr);
@@ -37,7 +41,7 @@ namespace InterView.Questions
             //Console.WriteLine("************************************************************");
             ////int[] SubArrayZero = { 6, 3, -1, -3, 4, -2, 2, 4, 6, -12, -7 };
             //int[] SubArrayZero = { 6,3,-9,-2,2,4,-4 };
-            //SubArrayZero.ToList().ForEach(item => Console.Write($"[{item}] "));
+            //PrintArr(SubArrayZero);
             //Console.WriteLine("Print all subarrays with 0 sum");
             //Console.WriteLine("Print all subarrays with 0 sum - O(n^2)");
             //PrintAllSubarraysZeroSum(SubArrayZero);
@@ -46,18 +50,29 @@ namespace InterView.Questions
             //Console.WriteLine("************************************************************");
             //Console.WriteLine($"countSubarray with  sum < 10  = {countSubarray(SubArrayZero,10)}");
 
-            Console.WriteLine("************************************************************");
-            Console.WriteLine($"bruteforce -> get max sum of sub-array ");
-            int[] arr = { 1, 4, 2, 10, 2, 3, 1,
-                      0, 20 };
-            int k = 4;
-            int n = arr.Length;
-            Console.WriteLine(maxSum(arr, n, k));
+            //Console.WriteLine("************************************************************");
+            //Console.WriteLine($"bruteforce -> get max sum of sub-array ");
+            
+            int[] arr = { 38, 27, 43, 3, 9, 82, 10 };
+
+            //int k = 4;
+            //int n = arr.Length;
+            //Console.WriteLine(maxSum(arr, n, k));
 
 
-            Console.WriteLine($"sliding window -> get max sum of sub-array ");
-            Console.WriteLine(MaxSumSlidingWindow(arr, n, k));
+            //Console.WriteLine($"sliding window -> get max sum of sub-array ");
+            //Console.WriteLine(MaxSumSlidingWindow(arr, n, k));
 
+            //SelectionSort(arr);
+            // BubbleSort(arr);
+
+
+            //BubbleSortRecursive(arr, arr.Length);
+            //InsertionSort(arr);
+
+            //MergeSort(arr);
+            //Sort012();
+            QuickSort();
         }
 
 
@@ -320,7 +335,6 @@ namespace InterView.Questions
 
         // Returns maximum sum in a  subarray of size k. 
 
-        #endregion
         static int maxSum(int[] arr, int n,int k)
         {
             int maxSum = 0;
@@ -367,6 +381,335 @@ namespace InterView.Questions
             return maxSum;
         }
 
+        #endregion
 
+        #region Sorting Algorithms
+        
+        
+        static void SelectionSort(int[] arr)
+        {
+            Console.WriteLine("Before SelectionSort");
+            PrintArr(arr);
+
+            int n = arr.Length;
+            for (int i=0;i< n; i++)
+            {
+                for(int j=i;j<n;j++)
+                {
+                    if (arr[j] < arr[i])
+                        SWAP(ref arr[j], ref arr[i]);
+                }
+            }
+
+            Console.WriteLine("After SelectionSort");
+            PrintArr(arr);
+        }
+
+        static void MergeSort(int[] arr)
+        {
+            Console.WriteLine("Before MergeSort");
+            PrintArr(arr);
+
+            List<int> sorted = MergeSortHelperRec(arr.ToList());
+
+
+
+
+
+            Console.WriteLine("After MergeSort");
+            PrintArr(sorted.ToArray());
+        }
+
+        private static List<int> MergeSortHelperRec(List<int> unsorted)
+        {
+            int middle = unsorted.Count / 2;
+            List<int> leftSubList = new List<int>();
+            List<int> rightSubList = new List<int>();
+
+            if (unsorted.Count <= 1)
+                return unsorted;
+
+            //populate left list
+            for (int i = 0; i < middle; i++)
+                leftSubList.Add(unsorted[i]);
+
+            //populate right list
+            for (int i = middle; i <= (unsorted.Count-1); i++)
+                rightSubList.Add(unsorted[i]);
+
+
+            //recursive calls;
+
+            leftSubList = MergeSortHelperRec(leftSubList);
+            rightSubList = MergeSortHelperRec(rightSubList);
+            return MergeSortedLists(leftSubList, rightSubList);
+
+        }
+
+        private static List<int> MergeSortedLists(List<int> left, List<int> right)
+        {
+            List<int> result = new List<int>();
+
+            while(left.Count > 0 || right.Count > 0) //as long you have orgrans in 
+            {
+                var leftItem = left.FirstOrDefault();
+                var rightItem = right.FirstOrDefault();
+
+                if (left.Count > 0 && right.Count > 0) 
+                {
+                   
+
+                    //iterate on both of them together and check who is bigger
+                    if (leftItem <= rightItem)  //Comparing First two elements to see which is smaller
+                    {
+                        result.Add(leftItem);
+                        left.Remove(leftItem);
+
+                    }
+                    else if(leftItem >= rightItem)
+                    {
+                        result.Add(rightItem);
+                        right.Remove(rightItem);
+                    }
+                     
+                       
+                }
+                else if(left.Count > 0)//right list is empty 
+                {
+                    result.Add(leftItem);
+                    left.Remove(leftItem);
+                }
+                else if (right.Count > 0) //left list is empty 
+                {
+                    result.Add(rightItem);
+                    right.Remove(rightItem);
+                }
+            }
+
+
+
+
+            return result;
+        }
+
+        //The above function always runs O(n^2) time even if the array is sorted. It can be optimized by stopping the algorithm if inner loop didn’t cause any swap.
+        static void BubbleSort(int[] arr)
+        {
+            Console.WriteLine("Before BubbleSort");
+            PrintArr(arr);
+
+            int n = arr.Length;
+            bool swapped;
+
+            for (int i = 0; i < n; i++)
+            {
+                swapped = false;
+
+                for (int j=0;j<n;j++)
+                {
+                    if (arr[j] > arr[i])
+                    {
+                        SWAP(ref arr[j], ref arr[i]);
+                        swapped = true;
+                    }
+                }
+                // IF no two elements were  
+                // swapped by inner loop, then break 
+                if (swapped == false)
+                    break;
+            }
+
+
+
+            Console.WriteLine("After BubbleSort");
+            PrintArr(arr);
+        }
+
+        static void BubbleSortRecursive(int[] arr,int n)
+        {
+            Console.WriteLine($"Recursive call BubbleSort, n={n}");
+            PrintArr(arr);
+
+            if (n == 1)
+                return;
+
+
+            //one pass of bubblesort and then recursive call
+            //pass the largest to the right
+            for(int i = 0; i < n-1; i++)
+            {
+                if (arr[i] > arr[i + 1])
+                    SWAP(ref arr[i], ref arr[i + 1]);
+            }
+
+
+            BubbleSortRecursive(arr, n - 1);
+
+        }
+
+        static void InsertionSort(int[] arr)
+        {
+
+            int n = arr.Length;
+           
+            Console.WriteLine("Before InsertionSort");
+            PrintArr(arr);
+
+           
+
+            for (int i = 0; i < n; i++)
+            {
+                int putInHeadItem = arr[i];
+                int marker = i-1;
+
+                // Move elements of arr[marker...n], 
+                // that are greater than putInHeadItem(arr[i]), 
+                // to one position ahead of their current position (shift right)
+
+                while (marker >= 0 && arr[marker] > putInHeadItem)
+                    {
+                        arr[marker + 1] = arr[marker];
+                        marker--;
+                    }
+
+                    arr[marker + 1] = putInHeadItem;
+            }
+
+
+
+            Console.WriteLine("After InsertionSort");
+            PrintArr(arr);
+        }
+
+        static void InsertionSortRecursive(int[] arr,int n)
+        {
+
+            // Base case 
+            if (n <= 1)
+                return;
+
+            // Sort first n-1 elements 
+            InsertionSortRecursive(arr, n - 1);
+
+            // Insert last element at  
+            // its correct position 
+            // in sorted array. 
+            int last = arr[n - 1];
+            int j = n - 2;
+
+            /* Move elements of arr[0..i-1],  
+            that are greater than key, to  
+            one position ahead of their 
+            current position */
+            while (j >= 0 && arr[j] > last)
+            {
+                arr[j + 1] = arr[j];
+                j--;
+            }
+            arr[j + 1] = last;
+        }
+
+        static void SWAP(ref int a,ref int b)
+        {
+            int temp = a;
+            a = b;
+            b = temp;
+        }
+
+        // Sort the input array, the array is assumed to 
+        // have values in {0, 1, 2} 
+        static void Sort012()
+        {
+            int[] a = { 0, 1, 1, 0, 1, 2, 1, 2, 0, 0, 0, 1 };
+            Console.WriteLine("Before Sort 0's 1's 2's");
+            PrintArr(a);
+
+            int n = a.Length, low = 0,mid = 0,high=n-1;
+            while(mid<=high)
+            {
+                switch (a[mid])
+                {
+                    case 0:
+                        SWAP(ref a[mid++], ref a[low++]);
+                        break;
+                    case 1:
+                        mid++;
+                        break;
+                    case 2:
+                        SWAP(ref a[mid], ref a[high--]);
+                        break;
+                }
+            }
+
+            Console.WriteLine("After Sort 0's 1's 2's");
+            PrintArr(a);
+        }
+
+        static void QuickSort()
+        {
+            int[] arr = { 10, 7, 8, 9, 1, 5 };
+            Console.WriteLine("Before QuickSort");
+            PrintArr(arr);
+
+            QuickSortRecursive(arr, 0, arr.Length-1);
+
+            Console.WriteLine("After QuickSort");
+            PrintArr(arr);
+        }
+
+        /* The main function that implements QuickSort() 
+    arr[] --> Array to be sorted, 
+    low --> Starting index, 
+    high --> Ending index */
+        static void QuickSortRecursive(int[] arr, int low, int high)
+        {
+            if (low < high)
+            {
+
+                /* pi is partitioning index, arr[pi] is now at right place */
+                int pi = Partition(arr, low, high);
+
+                // Recursively sort elements before 
+                // partition and after partition 
+                QuickSortRecursive(arr, low, pi - 1);
+                QuickSortRecursive(arr, pi + 1, high);
+            }
+
+        }
+
+        /* This function takes last element as pivot, 
+    places the pivot element at its correct 
+    position in sorted array, and places all 
+    smaller (smaller than pivot) to left of 
+    pivot and all greater elements to right 
+    of pivot */
+        static int Partition(int[] arr, int low,
+                                       int high)
+        {
+
+            int pivot = arr[high]; //we can select the last, the first, the random or the median for that task
+            // index of smaller element 
+
+            int i = (low - 1);
+            for(int j = low; j < high; j++)
+            {
+
+                // If current element is smaller  
+                // than the pivot 
+                if (arr[j] < pivot)
+                {
+                    // swap arr[i] and arr[j] 
+                    SWAP(ref arr[++i], ref arr[j]);
+                    
+                }
+            }
+
+            // swap arr[i+1] and arr[high] (or pivot) 
+            SWAP(ref arr[i+1], ref arr[high]);
+
+            return i + 1;
+        }
+
+        #endregion
     }
 }
