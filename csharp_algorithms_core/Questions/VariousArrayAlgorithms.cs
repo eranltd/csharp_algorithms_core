@@ -72,7 +72,9 @@ namespace InterView.Questions
 
             //MergeSort(arr);
             //Sort012();
-            QuickSort();
+            //QuickSort();
+
+            AddToSortedArray();
         }
 
 
@@ -711,5 +713,44 @@ namespace InterView.Questions
         }
 
         #endregion
+
+        #region Add-Element-To-Sorted-Array
+
+        static void AddToSortedArray()
+        {
+            int[] a = { 1,2,3,4,5,7,8,9 };
+            Console.WriteLine("Before Sort");
+            PrintArr(a);
+
+            bool inserted = false;
+            int insertMe = 6;
+            //create a new array at size n+1
+            //copy all elements to pivot and from pivot
+
+            int[] b = new int[a.Length + 1];
+            int looperA = 0;
+            int looperB = 0;
+
+            while (looperA <= a.Length - 1)
+            {
+                if(a[looperA] > insertMe && !inserted)
+                {
+                    b[looperB++] = insertMe;
+                    inserted = true;
+                    continue;
+                }
+                b[looperB] = a[looperA++];
+                looperB++;
+            }
+            Console.WriteLine("After Sort");
+            PrintArr(b);
+        }
+
+
+        #endregion
+
+
+
+
     }
 }
