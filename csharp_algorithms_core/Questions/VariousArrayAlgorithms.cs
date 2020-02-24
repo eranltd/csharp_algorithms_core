@@ -74,7 +74,9 @@ namespace InterView.Questions
             //Sort012();
             //QuickSort();
 
-            AddToSortedArray();
+            //AddToSortedArray();
+            //ShuffleArray();
+            RangeFunctionEmulator();
         }
 
 
@@ -748,6 +750,60 @@ namespace InterView.Questions
 
 
         #endregion
+
+        #region implement Range(start,stop,step) & shuffle(arr)
+
+
+        static void ShuffleArray()
+        {
+            int[] arr = {1,2,3,4,5,6,7,8,9 };
+            Console.WriteLine("Before ShuffleArray");
+            PrintArr(arr);
+
+            ShuffleHelper(arr);
+
+            Console.WriteLine("After ShuffleArray");
+            PrintArr(arr);
+
+        }
+        static void ShuffleHelper(int[] arr)
+        {
+            Random rnd = new Random();
+            int[] dirtyItems = new int[arr.Length];
+
+            for(int i=0;i<arr.Length-1;i++)
+            {
+                int index = rnd.Next(0, 3);
+                if (dirtyItems[i] == 0)
+                {
+                    SWAP(ref arr[i],ref arr[index]);
+                    dirtyItems[i] = 1;
+                    dirtyItems[index] = 1;
+                }
+            }
+        }
+
+
+        static void RangeFunctionEmulator()
+        {
+            int start = -10;
+            int end = 50;
+            int step = 10;
+
+            Console.WriteLine($"Range({start},{end},{step}");
+
+            List<int> rangeList = new List<int>();
+            
+            for(int i=start;Math.Abs(i) < Math.Abs(end);i+=step)
+            {
+                rangeList.Add(i);
+            }
+            PrintArr(rangeList.ToArray());
+        }
+       
+        
+        #endregion
+
 
 
 
