@@ -28,7 +28,7 @@ namespace InterView.Questions
 
     public static class VariousArrayAlgorithms
     {
-        public static List<int> TestNumbers = new List<int>() { 32,5,1041, 15  , 2147483647, 1376796946, 1073741825, 1610612737, 6291457, 1162, 561892, 6291457, 74901729 };
+        public static List<int> TestNumbers = new List<int>() { 32, 5, 51712, 1041, 15  , 2147483647 , 1376796946 , 1073741825 , 1610612737 , 6291457 , 1162, 561892, 6291457, 74901729 };
         
         
         public static void PrintArr(int[] arr) { Console.WriteLine(); arr.ToList().ForEach(item => Console.Write($"[{item}] ")); Console.WriteLine(); }
@@ -828,11 +828,15 @@ namespace InterView.Questions
         }
 
 
+        //we need to trail zeroes from the right!
         static int LengthOfLongestConsecutiveZeroesInTheBinaryRepresentationHelper(int N)
         {
             int RunningNumOfZeros = 0;
             int MaxNumOfZeros = -1;
+            int lastMaxNumOfZeros = 0;
             int numberOfOnes = 0;
+            
+            bool trailing_zeroes = false;
 
             while (N != 0)
 
@@ -840,13 +844,17 @@ namespace InterView.Questions
                 if ((N & 1) == 0)
                 {
                     RunningNumOfZeros++;
+                    trailing_zeroes = false;
                 }
                 else
                 {
                     RunningNumOfZeros = 0;
                     numberOfOnes++;
+                    lastMaxNumOfZeros = MaxNumOfZeros;
+                    trailing_zeroes = !trailing_zeroes;
                 }
                 N >>= 1;
+
                 MaxNumOfZeros = Math.Max(RunningNumOfZeros, MaxNumOfZeros);
                 
             }
