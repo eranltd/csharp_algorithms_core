@@ -12,8 +12,6 @@ namespace InterView.DataStructres
         int top;
         int currentMax;
         
-
-
         int[] stack = new int[MAX];
 
         bool IsEmpty()

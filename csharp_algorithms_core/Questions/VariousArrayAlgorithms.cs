@@ -28,7 +28,9 @@ namespace InterView.Questions
 
     public static class VariousArrayAlgorithms
     {
-
+        public static List<int> TestNumbers = new List<int>() { 32,5,1041, 15  , 2147483647, 1376796946, 1073741825, 1610612737, 6291457, 1162, 561892, 6291457, 74901729 };
+        
+        
         public static void PrintArr(int[] arr) { Console.WriteLine(); arr.ToList().ForEach(item => Console.Write($"[{item}] ")); Console.WriteLine(); }
         public static void Run()
         {
@@ -76,7 +78,8 @@ namespace InterView.Questions
 
             //AddToSortedArray();
             //ShuffleArray();
-            RangeFunctionEmulator();
+            //RangeFunctionEmulator();
+            LengthOfLongestConsecutiveZeroesInTheBinaryRepresentation();
         }
 
 
@@ -782,31 +785,79 @@ namespace InterView.Questions
                 }
             }
         }
-
-
-        static void RangeFunctionEmulator()
+        static void RangeFunctionEmulator(int start = -50,int end = 10,int step = 10)
         {
-            int start = -10;
-            int end = 50;
-            int step = 10;
-
             Console.WriteLine($"Range({start},{end},{step}");
+            step = start > end ? -step : step;
 
             List<int> rangeList = new List<int>();
-            
-            for(int i=start;Math.Abs(i) < Math.Abs(end);i+=step)
+            for(int i=start;i != end; i+= step)
             {
                 rangeList.Add(i);
             }
+            rangeList.Add(end);
             PrintArr(rangeList.ToArray());
         }
-       
-        
+
+
         #endregion
 
 
+        #region Length of longest consecutive zeroes in the binary representation of a number.
+
+        /*Input  : N = 14
+                    Output : 1
+                    Binary representation of 14 is 
+                    1110. There is only one 0 in
+                    the binary representation.
+
+                    Input : N = 9 
+                    Output : 2
+         */
+
+        static void LengthOfLongestConsecutiveZeroesInTheBinaryRepresentation()
+        {         
+            //count the number of zeros, when this number is represented as Binary.
+            foreach(var N in TestNumbers)
+            {
+                Console.WriteLine($"LengthOfLongestConsecutiveZeroesInTheBinaryRepresentation of Decimal = [{N}], Binary = [{Convert.ToString(N, 2)}] is {LengthOfLongestConsecutiveZeroesInTheBinaryRepresentationHelper(N)}");
+
+            }
+
+
+        }
+
+
+        static int LengthOfLongestConsecutiveZeroesInTheBinaryRepresentationHelper(int N)
+        {
+            int RunningNumOfZeros = 0;
+            int MaxNumOfZeros = -1;
+            int numberOfOnes = 0;
+
+            while (N != 0)
+
+            {
+                if ((N & 1) == 0)
+                {
+                    RunningNumOfZeros++;
+                }
+                else
+                {
+                    RunningNumOfZeros = 0;
+                    numberOfOnes++;
+                }
+                N >>= 1;
+                MaxNumOfZeros = Math.Max(RunningNumOfZeros, MaxNumOfZeros);
+                
+            }
+            return (numberOfOnes == 1)?0:MaxNumOfZeros;
+        }
+        
 
 
 
-    }
+            #endregion
+
+
+        }
 }

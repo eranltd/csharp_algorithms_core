@@ -21,7 +21,6 @@ namespace InterView
             //SortStackRecursive.Run();
             //BSTQuestions.Run();
             //HasSumOfTwoInArray.Run();
-
             //NutsBoltsProblem.Run();
             //FindTheFirstCircularTourThatVisitsAllPetrolPumps.Run();
             //BiggestReplicaInArray.Run();
@@ -31,8 +30,6 @@ namespace InterView
             //PermutationsOfString.Run();
             //Sortanarrayof0s1sand2s.Run();
             //EvenNumbersASCOddNumbersDESC.Run();
-            
-            
             
             VariousAlgorithms.Run();
             VariousArrayAlgorithms.Run();
