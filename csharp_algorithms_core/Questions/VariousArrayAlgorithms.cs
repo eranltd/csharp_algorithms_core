@@ -34,6 +34,8 @@ namespace InterView.Questions
         public static void PrintArr(int[] arr) { Console.WriteLine(); arr.ToList().ForEach(item => Console.Write($"[{item}] ")); Console.WriteLine(); }
         public static void Run()
         {
+            int[] arr = { 38, 27, 43, 3, 9, 82, 10 };
+
             Console.WriteLine("VariousArrayAlgorithms");
 
             //Console.WriteLine("Find a local minima in an array");
@@ -54,8 +56,7 @@ namespace InterView.Questions
 
             //Console.WriteLine("************************************************************");
             //Console.WriteLine($"bruteforce -> get max sum of sub-array ");
-            
-            int[] arr = { 38, 27, 43, 3, 9, 82, 10 };
+
 
             //int k = 4;
             //int n = arr.Length;
@@ -79,7 +80,10 @@ namespace InterView.Questions
             //AddToSortedArray();
             //ShuffleArray();
             //RangeFunctionEmulator();
-            LengthOfLongestConsecutiveZeroesInTheBinaryRepresentation();
+            //LengthOfLongestConsecutiveZeroesInTheBinaryRepresentation();
+            //FindOddElement();
+            //RotateArrayDemo();
+            MissingElementFind();
         }
 
 
@@ -802,6 +806,169 @@ namespace InterView.Questions
 
         #endregion
 
+        #region find element who does not have pair in array.
+
+        static void FindOddElement()
+        {
+            //int[] arr = { 6,6,9,9,3 };
+            //int[] arr = new int[0];
+
+            int[] arr = { 2,2,2,1,1 };
+            
+
+
+            Console.WriteLine("FindOddElement");
+
+            PrintArr(arr);
+
+            Console.WriteLine($"Found {FindOddElementHelper(arr)}");
+            Console.WriteLine($"Found {FindOddElementSecondHelper(arr)}");
+
+        }
+        static int FindOddElementHelper(int[] arr)
+        {
+            //there are x pairs in this array, and one element who has no pair at all.
+            if (arr.Length == 0 || arr == null)
+                return 0;
+
+
+
+            //solve it using MAP?
+
+            Dictionary<int, int> hash = new Dictionary<int, int>(); //<number, numberofoccurences>
+
+            foreach (int number in arr)
+            {
+                //exist in dict
+                if (hash.ContainsKey(number))
+                {
+                    hash[number]++;
+                }
+                else //not exist
+                {
+                    hash.Add(number, 1);
+                }
+            }
+
+            if (hash.Where(item => item.Value == 1).FirstOrDefault().Value > 2)
+                return 0;
+
+            //later iterate on dictionary and find who has 1 occur.
+            int oddOccur = hash.Where(item => item.Value == 1).FirstOrDefault().Key; //what happens if there is no one?
+            return oddOccur;
+        }
+        static int FindOddElementSecondHelper(int[] arr)
+        {
+            int result = 0;
+            foreach(var num in arr)
+            {
+                result ^= num;
+            }
+
+            return result;
+        }
+
+        #endregion
+
+
+        #region rotateArrayToTheRight
+
+        static void RotateArrayDemo()
+        {
+            int k = 3;
+
+            //int[] arr = { 3, 8, 9, 7, 6 };
+            int[] arr = { 1, 2, 3, 4 };
+
+
+            Console.WriteLine("RotateArrayDemo Before K =3");
+
+            PrintArr(arr);
+
+
+            Console.WriteLine("RotateArrayDemo After K =3");
+            RotateArrayDemoHelper(arr, 4);
+            PrintArr(arr);
+
+        }
+        static void RotateArrayDemoHelper(int[] A, int K)
+        {
+            int len = A.Length - 1;
+
+            if (K == 0 || A.Length < 2 || A == null) return;
+            while (K-- > 0)
+            {
+               
+                int tmp = A[len];
+                for (int i = len; i > 0; i--)
+                {
+                    A[i] = A[i - 1];
+                }
+                A[0] = tmp; //now "rotate" last to first.
+            }
+
+        }
+
+
+        #endregion
+
+
+
+        #region rotateArrayToTheRight
+
+        static void MissingElementFind()
+        {
+
+            int[] arr = { 1, 2, 3, 5 };
+
+
+            Console.WriteLine("MissingElementFind");
+
+            PrintArr(arr);
+
+
+            Console.WriteLine($"Missing Element is : {MissingElementFindHelper(arr)}");
+           
+
+        }
+        static int MissingElementFindHelper(int[] A)
+        {
+                if (A.Length == 0 || A == null)
+                    return 1;
+
+                if (A.Length == 1 && A[0] == 1)
+                    return 2;
+
+                if (A.Length == 1 && A[0] == 2)
+                    return 1;
+
+                int len = A.Length;
+
+                int accumulatingSum = 0;
+                int runningSum = 0;
+
+                int i = 0;
+                for (i = 0; i < len; i++)
+                {
+                    runningSum += A[i];
+                    accumulatingSum += i;
+                }
+                accumulatingSum += len + 1;
+                accumulatingSum += len ;
+
+
+        
+
+         
+
+
+                return (accumulatingSum - runningSum);
+
+        }
+
+
+        #endregion
+
 
         #region Length of longest consecutive zeroes in the binary representation of a number.
 
@@ -867,5 +1034,19 @@ namespace InterView.Questions
             #endregion
 
 
+
+
+        static int[] GenerateRandomArrayOfNumbers(int n=5,int minValue=0,int maxValue=5)
+        {
+            Random rnd = new Random();
+            List<int> randomNumbers = new List<int>();
+            while(n > 0)
+            {
+                randomNumbers.Add(rnd.Next(minValue, maxValue));
+                n--;
+            }
+
+            return randomNumbers.ToArray();
         }
+    }
 }
