@@ -87,8 +87,8 @@ namespace InterView.Questions
             //TapeEquilibrium();
             //FrogOneLeap();
             // PermCheck();
-            MissingInteger();
-
+            //MissingInteger();
+            MaxCounters();
         }
 
 
@@ -1064,6 +1064,109 @@ namespace InterView.Questions
 
 
         #endregion
+
+        #region MaxCounters
+
+        /*Calculate the values of counters after applying all alternating operations: increase counter by 1; set value of all counters to current maximum..*/
+
+
+        static void MaxCounters()
+        {
+            Console.WriteLine("MaxCounters");
+
+            int[] arr = { 3,4,4,6,1,4,4 };
+            PrintArr(arr);
+
+            int[] result = MaxCountersHelper(5, arr);
+
+
+            Console.WriteLine($"MaxCounters returned.");
+            PrintArr(result);
+
+
+        }
+
+        //N - number of counters
+        //A - actions on numbers - if A[K] = X, such that 1 ≤ X ≤ N, then operation K is increase(X),if A[K] = N + 1 then operation K is max counter.
+        static int[] MaxCountersHelper(int N, int[] A)
+        {
+            int len = A.Length;
+
+            int[] result = new int[N];
+
+            foreach(var it in A)
+            {
+                if (it >= 1 && it <= N)
+                    result[it-1]++;
+                else
+                {
+                    int max = result.Max();
+                    ResetArray(result, max);
+                }
+
+            }
+
+
+
+
+
+            return result;
+        }
+
+
+        public static int[] MaxCountersHelperEfficient(int N, int[] A)
+        {
+            int[] counters = new int[N];
+            for (var index = 0; index < counters.Length; ++index)
+            {
+                counters[index] = 0;
+            }
+
+            var maxCounter = 0;
+            var effectiveMaxCounter = 0;
+
+            foreach (var e in A)
+            {
+                if (e <= N)
+                {
+                    if (counters[e - 1] > effectiveMaxCounter)
+                    {
+                        counters[e - 1]++;
+                    }
+                    else
+                    {
+                        counters[e - 1] = effectiveMaxCounter + 1;
+                    }
+                    maxCounter = Math.Max(maxCounter, counters[e - 1]);
+                }
+                else
+                {
+                    effectiveMaxCounter = maxCounter;
+                }
+            }
+
+            for (var index = 0; index < counters.Length; ++index)
+            {
+                counters[index] = Math.Max(counters[index], effectiveMaxCounter);
+            }
+
+            return counters;
+        }
+   
+
+    static void ResetArray(int[] arr,int value)
+        {
+            int len = arr.Length;
+            for (int i = 0; i < len; i++)
+            {
+                arr[i] = value;
+            }
+        }
+
+
+        #endregion
+        
+
 
 
 
