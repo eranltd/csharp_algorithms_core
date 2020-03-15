@@ -83,7 +83,12 @@ namespace InterView.Questions
             //LengthOfLongestConsecutiveZeroesInTheBinaryRepresentation();
             //FindOddElement();
             //RotateArrayDemo();
-            MissingElementFind();
+            //MissingElementFind();
+            //TapeEquilibrium();
+            //FrogOneLeap();
+            // PermCheck();
+            MissingInteger();
+
         }
 
 
@@ -968,6 +973,205 @@ namespace InterView.Questions
 
 
         #endregion
+
+
+
+
+        #region FrogOneLeap
+
+        /*The goal is to find the earliest time when the frog can jump to the other side of the river. The frog can cross only when leaves appear at every position across the river from 1 to X (that is, we want to find the earliest moment when all the positions from 1 to X are covered by leaves). You may assume that the speed of the current in the river is negligibly small, i.e. the leaves do not change their positions once they fall in the river.
+        */
+        static void FrogOneLeap()
+        {
+
+            int[] arr = { 5 };
+            //int[] arr = { 1, 3, 1, 4, 2, 3, 5, 4 };
+
+
+            Console.WriteLine("FrogOneLeap");
+
+            Console.WriteLine($"smallest FrogOneLeap is : {FrogOneLeapHelper(arr,5)}");
+
+
+        }
+        static int FrogOneLeapHelper(int[] A,int X)
+        {
+            if (A.Length == 1 && A[0] == X)
+                return 1;
+
+            int indexesLen = A.Length ;
+            Dictionary<int, int> leaves = new Dictionary<int, int>();
+
+
+            for (int i = 0; i< indexesLen ; i++)
+            {
+                if(leaves.TryGetValue(A[i],out int index))
+                {
+
+                }
+                else
+                    leaves.Add(A[i], i);
+            }
+
+            return leaves.Count() == X ? leaves.Values.Max() :-1 ;
+        }
+
+
+        #endregion
+
+
+        #region MissingInteger
+
+        /*that, given an array A of N integers, returns the smallest positive integer (greater than 0) that does not occur in A.
+        For example, given A = [1, 3, 6, 4, 1, 2], the function should return 5.*/
+
+
+        static void MissingInteger()
+        {
+            int[] arr = { 1, 2, 3 };
+           int[] arr2 = { -1, -3 };
+            int[] arr3 = { 1, 3, 6, 4, 1, 2 };
+
+            Console.WriteLine("MissingInteger");
+            Console.WriteLine($"MissingInteger returned : {MissingIntegerHelper(arr3)}");
+
+
+        }
+        static int MissingIntegerHelper(int[] A)
+        {
+            int len = A.Length;
+            HashSet<int> realSet = new HashSet<int>();
+            HashSet<int> perfectSet = new HashSet<int>();
+
+            int i = 0;
+            while ( i < len)
+            {
+                realSet.Add(A[i]);   //convert array to set to get rid of duplicates, order int's
+                perfectSet.Add(i + 1);  //create perfect set so can find missing int
+                i++;
+            }
+            perfectSet.Add(i + 1);
+
+            if (realSet.All(item => item < 0))
+                return 1;
+
+            int notContains = perfectSet.Except(realSet).Where(item=>item!=0).FirstOrDefault();
+            return notContains;
+
+
+
+        }
+
+
+        #endregion
+
+
+
+        #region PermCheck
+
+        /*check that A contains 1,2,3,4,5, if contains 1,2,3,5 -> false*/
+        static void PermCheck()
+        {
+
+           
+            int[] arr = { 4, 1, 3 };
+
+
+            Console.WriteLine("FrogOneLeap");
+
+            Console.WriteLine($"PermCheckHelper returned : {PermCheckHelper(arr)}");
+
+
+        }
+        static int PermCheckHelper(int[] A)
+        {
+
+            int len = A.Length;
+            HashSet<int> leaves = new HashSet<int>(A);
+            return leaves.Count() == len && A.Max() == len ? 1 : 0;
+        }
+
+
+        #endregion
+
+
+
+
+
+        #region TapeEquilibrium
+
+        /*A non-empty array A consisting of N integers is given. Array A represents numbers on a tape.
+
+        Any integer P, such that 0 < P < N, splits this tape into two non-empty parts: A[0], A[1], ..., A[P − 1] and A[P], A[P + 1], ..., A[N − 1].
+
+        The difference between the two parts is the value of: |(A[0] + A[1] + ... + A[P − 1]) − (A[P] + A[P + 1] + ... + A[N − 1])|
+
+        In other words, it is the absolute difference between the sum of the first part and the sum of the second part.
+        
+        Return the smallest diff.
+        */
+        static void TapeEquilibrium()
+        {
+
+            //int[] arr = { 3,1,2,4,3 };
+
+            //int[] arr = {-2,1,3 };
+
+            //int[] arr = { -3000,1000};
+            int[] arr = GenerateRandomArrayOfNumbers(20,0,5);
+
+
+
+            Console.WriteLine("TapeEquilibrium");
+
+            //PrintArr(arr);
+
+
+            Console.WriteLine($"smallest TapeEquilibrium is : {TapeEquilibriumHelper(arr)}");
+
+
+        }
+        static int TapeEquilibriumHelper(int[] A)
+        {
+            int len = A.Length;
+
+            if (len < 2 || A == null)
+                return 0;
+
+            if (len == 2)
+                return (Math.Abs(A[0] - A[1]));
+
+            if (len == 1)
+
+                return (Math.Abs(A[0]));
+
+
+
+            int partitionLeft = 0;
+
+            int accumLeftSum = 0;
+            int totalSum = 0;
+
+            foreach (var num in A)
+                totalSum += num;
+
+            int smallestAccum = int.MaxValue;
+
+
+            while (partitionLeft < len ) //O(n)
+            {
+                accumLeftSum += A[partitionLeft];
+                int rightSum = totalSum - accumLeftSum;
+                partitionLeft++;
+                smallestAccum = Math.Min(Math.Abs(Math.Abs(accumLeftSum) - Math.Abs(rightSum)), Math.Abs(smallestAccum));
+            }
+
+            return smallestAccum;
+        }
+
+
+        #endregion
+
 
 
         #region Length of longest consecutive zeroes in the binary representation of a number.
