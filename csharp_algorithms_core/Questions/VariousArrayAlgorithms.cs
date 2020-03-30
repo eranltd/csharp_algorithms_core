@@ -29,9 +29,9 @@ namespace InterView.Questions
 
     public static class VariousArrayAlgorithms
     {
-        public static List<int> TestNumbers = new List<int>() { 32, 5, 51712, 1041, 15  , 2147483647 , 1376796946 , 1073741825 , 1610612737 , 6291457 , 1162, 561892, 6291457, 74901729 };
-        
-        
+        public static List<int> TestNumbers = new List<int>() { 32, 5, 51712, 1041, 15, 2147483647, 1376796946, 1073741825, 1610612737, 6291457, 1162, 561892, 6291457, 74901729 };
+
+
         public static void PrintArr(int[] arr) { Console.WriteLine(); arr.ToList().ForEach(item => Console.Write($"[{item}] ")); Console.WriteLine(); }
         public static void Run()
         {
@@ -91,8 +91,8 @@ namespace InterView.Questions
             //MissingInteger();
             //MaxCounters();
             //MushroomPicker();
-
-            PassingCars();
+            //PassingCars();
+            MinAvgTwoSlice();
         }
 
 
@@ -355,26 +355,26 @@ namespace InterView.Questions
 
         // Returns maximum sum in a  subarray of size k. 
 
-        static int maxSum(int[] arr, int n,int k)
+        static int maxSum(int[] arr, int n, int k)
         {
             int maxSum = 0;
             // Consider all blocks starting 
             // with i. 
 
-            for(int i=0; i < n-k+1 ;i++)
+            for (int i = 0; i < n - k + 1; i++)
             {
                 int current_sum = 0;
                 for (int j = 0; j < k; j++)
                     current_sum = current_sum + arr[i + j];
 
                 // Update result if required. 
-                maxSum = Math.Max(current_sum,maxSum);
+                maxSum = Math.Max(current_sum, maxSum);
             }
             return maxSum;
 
         }
 
-        static int MaxSumSlidingWindow(int[] arr,int n,int k)
+        static int MaxSumSlidingWindow(int[] arr, int n, int k)
         {
             int maxSum = 0;
 
@@ -391,7 +391,7 @@ namespace InterView.Questions
             }
 
             maxSum = window_sum;
-            for (int i=k ; i<n; i++)
+            for (int i = k; i < n; i++)
             {
                 window_sum += arr[i];
                 window_sum -= arr[start++];
@@ -404,17 +404,17 @@ namespace InterView.Questions
         #endregion
 
         #region Sorting Algorithms
-        
-        
+
+
         static void SelectionSort(int[] arr)
         {
             Console.WriteLine("Before SelectionSort");
             PrintArr(arr);
 
             int n = arr.Length;
-            for (int i=0;i< n; i++)
+            for (int i = 0; i < n; i++)
             {
-                for(int j=i;j<n;j++)
+                for (int j = i; j < n; j++)
                 {
                     if (arr[j] < arr[i])
                         SWAP(ref arr[j], ref arr[i]);
@@ -454,7 +454,7 @@ namespace InterView.Questions
                 leftSubList.Add(unsorted[i]);
 
             //populate right list
-            for (int i = middle; i <= (unsorted.Count-1); i++)
+            for (int i = middle; i <= (unsorted.Count - 1); i++)
                 rightSubList.Add(unsorted[i]);
 
 
@@ -470,14 +470,14 @@ namespace InterView.Questions
         {
             List<int> result = new List<int>();
 
-            while(left.Count > 0 || right.Count > 0) //as long you have orgrans in 
+            while (left.Count > 0 || right.Count > 0) //as long you have orgrans in 
             {
                 var leftItem = left.FirstOrDefault();
                 var rightItem = right.FirstOrDefault();
 
-                if (left.Count > 0 && right.Count > 0) 
+                if (left.Count > 0 && right.Count > 0)
                 {
-                   
+
 
                     //iterate on both of them together and check who is bigger
                     if (leftItem <= rightItem)  //Comparing First two elements to see which is smaller
@@ -486,15 +486,15 @@ namespace InterView.Questions
                         left.Remove(leftItem);
 
                     }
-                    else if(leftItem >= rightItem)
+                    else if (leftItem >= rightItem)
                     {
                         result.Add(rightItem);
                         right.Remove(rightItem);
                     }
-                     
-                       
+
+
                 }
-                else if(left.Count > 0)//right list is empty 
+                else if (left.Count > 0)//right list is empty 
                 {
                     result.Add(leftItem);
                     left.Remove(leftItem);
@@ -525,7 +525,7 @@ namespace InterView.Questions
             {
                 swapped = false;
 
-                for (int j=0;j<n;j++)
+                for (int j = 0; j < n; j++)
                 {
                     if (arr[j] > arr[i])
                     {
@@ -545,7 +545,7 @@ namespace InterView.Questions
             PrintArr(arr);
         }
 
-        static void BubbleSortRecursive(int[] arr,int n)
+        static void BubbleSortRecursive(int[] arr, int n)
         {
             Console.WriteLine($"Recursive call BubbleSort, n={n}");
             PrintArr(arr);
@@ -556,7 +556,7 @@ namespace InterView.Questions
 
             //one pass of bubblesort and then recursive call
             //pass the largest to the right
-            for(int i = 0; i < n-1; i++)
+            for (int i = 0; i < n - 1; i++)
             {
                 if (arr[i] > arr[i + 1])
                     SWAP(ref arr[i], ref arr[i + 1]);
@@ -571,28 +571,28 @@ namespace InterView.Questions
         {
 
             int n = arr.Length;
-           
+
             Console.WriteLine("Before InsertionSort");
             PrintArr(arr);
 
-           
+
 
             for (int i = 0; i < n; i++)
             {
                 int putInHeadItem = arr[i];
-                int marker = i-1;
+                int marker = i - 1;
 
                 // Move elements of arr[marker...n], 
                 // that are greater than putInHeadItem(arr[i]), 
                 // to one position ahead of their current position (shift right)
 
                 while (marker >= 0 && arr[marker] > putInHeadItem)
-                    {
-                        arr[marker + 1] = arr[marker];
-                        marker--;
-                    }
+                {
+                    arr[marker + 1] = arr[marker];
+                    marker--;
+                }
 
-                    arr[marker + 1] = putInHeadItem;
+                arr[marker + 1] = putInHeadItem;
             }
 
 
@@ -601,7 +601,7 @@ namespace InterView.Questions
             PrintArr(arr);
         }
 
-        static void InsertionSortRecursive(int[] arr,int n)
+        static void InsertionSortRecursive(int[] arr, int n)
         {
 
             // Base case 
@@ -629,7 +629,7 @@ namespace InterView.Questions
             arr[j + 1] = last;
         }
 
-        static void SWAP(ref int a,ref int b)
+        static void SWAP(ref int a, ref int b)
         {
             int temp = a;
             a = b;
@@ -644,8 +644,8 @@ namespace InterView.Questions
             Console.WriteLine("Before Sort 0's 1's 2's");
             PrintArr(a);
 
-            int n = a.Length, low = 0,mid = 0,high=n-1;
-            while(mid<=high)
+            int n = a.Length, low = 0, mid = 0, high = n - 1;
+            while (mid <= high)
             {
                 switch (a[mid])
                 {
@@ -671,7 +671,7 @@ namespace InterView.Questions
             Console.WriteLine("Before QuickSort");
             PrintArr(arr);
 
-            QuickSortRecursive(arr, 0, arr.Length-1);
+            QuickSortRecursive(arr, 0, arr.Length - 1);
 
             Console.WriteLine("After QuickSort");
             PrintArr(arr);
@@ -711,7 +711,7 @@ namespace InterView.Questions
             // index of smaller element 
 
             int i = (low - 1);
-            for(int j = low; j < high; j++)
+            for (int j = low; j < high; j++)
             {
 
                 // If current element is smaller  
@@ -720,12 +720,12 @@ namespace InterView.Questions
                 {
                     // swap arr[i] and arr[j] 
                     SWAP(ref arr[++i], ref arr[j]);
-                    
+
                 }
             }
 
             // swap arr[i+1] and arr[high] (or pivot) 
-            SWAP(ref arr[i+1], ref arr[high]);
+            SWAP(ref arr[i + 1], ref arr[high]);
 
             return i + 1;
         }
@@ -736,7 +736,7 @@ namespace InterView.Questions
 
         static void AddToSortedArray()
         {
-            int[] a = { 1,2,3,4,5,7,8,9 };
+            int[] a = { 1, 2, 3, 4, 5, 7, 8, 9 };
             Console.WriteLine("Before Sort");
             PrintArr(a);
 
@@ -751,7 +751,7 @@ namespace InterView.Questions
 
             while (looperA <= a.Length - 1)
             {
-                if(a[looperA] > insertMe && !inserted)
+                if (a[looperA] > insertMe && !inserted)
                 {
                     b[looperB++] = insertMe;
                     inserted = true;
@@ -772,7 +772,7 @@ namespace InterView.Questions
 
         static void ShuffleArray()
         {
-            int[] arr = {1,2,3,4,5,6,7,8,9 };
+            int[] arr = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
             Console.WriteLine("Before ShuffleArray");
             PrintArr(arr);
 
@@ -787,24 +787,24 @@ namespace InterView.Questions
             Random rnd = new Random();
             int[] dirtyItems = new int[arr.Length];
 
-            for(int i=0;i<arr.Length-1;i++)
+            for (int i = 0; i < arr.Length - 1; i++)
             {
                 int index = rnd.Next(0, 3);
                 if (dirtyItems[i] == 0)
                 {
-                    SWAP(ref arr[i],ref arr[index]);
+                    SWAP(ref arr[i], ref arr[index]);
                     dirtyItems[i] = 1;
                     dirtyItems[index] = 1;
                 }
             }
         }
-        static void RangeFunctionEmulator(int start = -50,int end = 10,int step = 10)
+        static void RangeFunctionEmulator(int start = -50, int end = 10, int step = 10)
         {
             Console.WriteLine($"Range({start},{end},{step}");
             step = start > end ? -step : step;
 
             List<int> rangeList = new List<int>();
-            for(int i=start;i != end; i+= step)
+            for (int i = start; i != end; i += step)
             {
                 rangeList.Add(i);
             }
@@ -822,8 +822,8 @@ namespace InterView.Questions
             //int[] arr = { 6,6,9,9,3 };
             //int[] arr = new int[0];
 
-            int[] arr = { 2,2,2,1,1 };
-            
+            int[] arr = { 2, 2, 2, 1, 1 };
+
 
 
             Console.WriteLine("FindOddElement");
@@ -869,7 +869,7 @@ namespace InterView.Questions
         static int FindOddElementSecondHelper(int[] arr)
         {
             int result = 0;
-            foreach(var num in arr)
+            foreach (var num in arr)
             {
                 result ^= num;
             }
@@ -884,18 +884,16 @@ namespace InterView.Questions
 
         static void RotateArrayDemo()
         {
-            int k = 3;
-
             //int[] arr = { 3, 8, 9, 7, 6 };
             int[] arr = { 1, 2, 3, 4 };
 
 
-            Console.WriteLine("RotateArrayDemo Before K =3");
+            Console.WriteLine("RotateArrayDemo Before K =4");
 
             PrintArr(arr);
 
 
-            Console.WriteLine("RotateArrayDemo After K =3");
+            Console.WriteLine("RotateArrayDemo After K =4");
             RotateArrayDemoHelper(arr, 4);
             PrintArr(arr);
 
@@ -907,7 +905,7 @@ namespace InterView.Questions
             if (K == 0 || A.Length < 2 || A == null) return;
             while (K-- > 0)
             {
-               
+
                 int tmp = A[len];
                 for (int i = len; i > 0; i--)
                 {
@@ -937,41 +935,41 @@ namespace InterView.Questions
 
 
             Console.WriteLine($"Missing Element is : {MissingElementFindHelper(arr)}");
-           
+
 
         }
         static int MissingElementFindHelper(int[] A)
         {
-                if (A.Length == 0 || A == null)
-                    return 1;
+            if (A.Length == 0 || A == null)
+                return 1;
 
-                if (A.Length == 1 && A[0] == 1)
-                    return 2;
+            if (A.Length == 1 && A[0] == 1)
+                return 2;
 
-                if (A.Length == 1 && A[0] == 2)
-                    return 1;
+            if (A.Length == 1 && A[0] == 2)
+                return 1;
 
-                int len = A.Length;
+            int len = A.Length;
 
-                int accumulatingSum = 0;
-                int runningSum = 0;
+            int accumulatingSum = 0;
+            int runningSum = 0;
 
-                int i = 0;
-                for (i = 0; i < len; i++)
-                {
-                    runningSum += A[i];
-                    accumulatingSum += i;
-                }
-                accumulatingSum += len + 1;
-                accumulatingSum += len ;
-
-
-        
-
-         
+            int i = 0;
+            for (i = 0; i < len; i++)
+            {
+                runningSum += A[i];
+                accumulatingSum += i;
+            }
+            accumulatingSum += len + 1;
+            accumulatingSum += len;
 
 
-                return (accumulatingSum - runningSum);
+
+
+
+
+
+            return (accumulatingSum - runningSum);
 
         }
 
@@ -994,22 +992,22 @@ namespace InterView.Questions
 
             Console.WriteLine("FrogOneLeap");
 
-            Console.WriteLine($"smallest FrogOneLeap is : {FrogOneLeapHelper(arr,5)}");
+            Console.WriteLine($"smallest FrogOneLeap is : {FrogOneLeapHelper(arr, 5)}");
 
 
         }
-        static int FrogOneLeapHelper(int[] A,int X)
+        static int FrogOneLeapHelper(int[] A, int X)
         {
             if (A.Length == 1 && A[0] == X)
                 return 1;
 
-            int indexesLen = A.Length ;
+            int indexesLen = A.Length;
             Dictionary<int, int> leaves = new Dictionary<int, int>();
 
 
-            for (int i = 0; i< indexesLen ; i++)
+            for (int i = 0; i < indexesLen; i++)
             {
-                if(leaves.TryGetValue(A[i],out int index))
+                if (leaves.TryGetValue(A[i], out int index))
                 {
 
                 }
@@ -1017,7 +1015,7 @@ namespace InterView.Questions
                     leaves.Add(A[i], i);
             }
 
-            return leaves.Count() == X ? leaves.Values.Max() :-1 ;
+            return leaves.Count() == X ? leaves.Values.Max() : -1;
         }
 
 
@@ -1033,7 +1031,7 @@ namespace InterView.Questions
         static void MissingInteger()
         {
             int[] arr = { 1, 2, 3 };
-           int[] arr2 = { -1, -3 };
+            int[] arr2 = { -1, -3 };
             int[] arr3 = { 1, 3, 6, 4, 1, 2 };
 
             Console.WriteLine("MissingInteger");
@@ -1048,7 +1046,7 @@ namespace InterView.Questions
             HashSet<int> perfectSet = new HashSet<int>();
 
             int i = 0;
-            while ( i < len)
+            while (i < len)
             {
                 realSet.Add(A[i]);   //convert array to set to get rid of duplicates, order int's
                 perfectSet.Add(i + 1);  //create perfect set so can find missing int
@@ -1059,7 +1057,7 @@ namespace InterView.Questions
             if (realSet.All(item => item < 0))
                 return 1;
 
-            int notContains = perfectSet.Except(realSet).Where(item=>item!=0).FirstOrDefault();
+            int notContains = perfectSet.Except(realSet).Where(item => item != 0).FirstOrDefault();
             return notContains;
 
 
@@ -1078,7 +1076,7 @@ namespace InterView.Questions
         {
             Console.WriteLine("MaxCounters");
 
-            int[] arr = { 3,4,4,6,1,4,4 };
+            int[] arr = { 3, 4, 4, 6, 1, 4, 4 };
             PrintArr(arr);
 
             int[] result = MaxCountersHelper(5, arr);
@@ -1098,10 +1096,10 @@ namespace InterView.Questions
 
             int[] result = new int[N];
 
-            foreach(var it in A)
+            foreach (var it in A)
             {
                 if (it >= 1 && it <= N)
-                    result[it-1]++;
+                    result[it - 1]++;
                 else
                 {
                     int max = result.Max();
@@ -1156,9 +1154,9 @@ namespace InterView.Questions
 
             return counters;
         }
-   
 
-    static void ResetArray(int[] arr,int value)
+
+        static void ResetArray(int[] arr, int value)
         {
             int len = arr.Length;
             for (int i = 0; i < len; i++)
@@ -1169,7 +1167,7 @@ namespace InterView.Questions
 
 
         #endregion
-        
+
 
 
 
@@ -1180,7 +1178,7 @@ namespace InterView.Questions
         static void PermCheck()
         {
 
-           
+
             int[] arr = { 4, 1, 3 };
 
 
@@ -1225,7 +1223,7 @@ namespace InterView.Questions
             //int[] arr = {-2,1,3 };
 
             //int[] arr = { -3000,1000};
-            int[] arr = GenerateRandomArrayOfNumbers(20,0,5);
+            int[] arr = GenerateRandomArrayOfNumbers(20, 0, 5);
 
 
 
@@ -1265,7 +1263,7 @@ namespace InterView.Questions
             int smallestAccum = int.MaxValue;
 
 
-            while (partitionLeft < len ) //O(n)
+            while (partitionLeft < len) //O(n)
             {
                 accumLeftSum += A[partitionLeft];
                 int rightSum = totalSum - accumLeftSum;
@@ -1294,9 +1292,9 @@ namespace InterView.Questions
          */
 
         static void LengthOfLongestConsecutiveZeroesInTheBinaryRepresentation()
-        {         
+        {
             //count the number of zeros, when this number is represented as Binary.
-            foreach(var N in TestNumbers)
+            foreach (var N in TestNumbers)
             {
                 Console.WriteLine($"LengthOfLongestConsecutiveZeroesInTheBinaryRepresentation of Decimal = [{N}], Binary = [{Convert.ToString(N, 2)}] is {LengthOfLongestConsecutiveZeroesInTheBinaryRepresentationHelper(N)}");
 
@@ -1313,7 +1311,7 @@ namespace InterView.Questions
             int MaxNumOfZeros = -1;
             int lastMaxNumOfZeros = 0;
             int numberOfOnes = 0;
-            
+
             bool trailing_zeroes = false;
 
             while (N != 0)
@@ -1334,9 +1332,9 @@ namespace InterView.Questions
                 N >>= 1;
 
                 MaxNumOfZeros = Math.Max(RunningNumOfZeros, MaxNumOfZeros);
-                
+
             }
-            return (numberOfOnes == 1)?0:MaxNumOfZeros;
+            return (numberOfOnes == 1) ? 0 : MaxNumOfZeros;
         }
 
 
@@ -1363,7 +1361,7 @@ namespace InterView.Questions
 
             int[] prefixes = PrefixSums(A);
 
-            for(int p = 0;p< Math.Min(k,m)+1;p++)
+            for (int p = 0; p < Math.Min(k, m) + 1; p++)
             {
                 var left_pos = k - p;
                 var right_pos = Math.Min(n - 1, Math.Max(k, k + m - 2 * p));
@@ -1371,7 +1369,7 @@ namespace InterView.Questions
             }
 
 
-            for (int p = 0; p < Math.Min(m+1,n-k); p++)
+            for (int p = 0; p < Math.Min(m + 1, n - k); p++)
             {
 
                 var right_pos = k + p;
@@ -1383,11 +1381,6 @@ namespace InterView.Questions
 
             Console.WriteLine($"Maximum Number of pickable mushrooms  is {result} given m={m}, k={k}");
 
-        }
-
-        static void CountDiv()
-        {
-            Console.WriteLine("CountDiv");
         }
 
 
@@ -1416,12 +1409,11 @@ namespace InterView.Questions
 
         }
 
-
         static int PrefixSumsCars(int[] A)
         {
-            double result = 0 ;
+            double result = 0;
 
-            #region  inEfficient sol
+            #region  inEfficient sol works only 10% of cases.
             //inEfficient sol
             //int n = arr.Length;
 
@@ -1455,7 +1447,7 @@ namespace InterView.Questions
                 {
                     if (car == 1)
                     {
-                        result = result + east;
+                        result = result + east; //we don't want to sum west as well cause it will be sum 2 pairs instead of one.
                         if (result > 1000000000)
                         {
                             return -1;
@@ -1464,12 +1456,11 @@ namespace InterView.Questions
                 }
             }
 
-
+            #endregion
             return (int)result;
-        
-        
-        }
 
+
+        }
 
         static int[] PrefixSums(int[] arr)
         {
@@ -1487,6 +1478,50 @@ namespace InterView.Questions
         //Total of one slice — O(1).
         static int CountTotal(int[] P, int x, int y) => P[y + 1] - P[x];
 
+
+        /*The average of a slice (P, Q) is the sum of A[P] + A[P + 1] + ... + A[Q] divided by the length of the slice. To be precise, the average equals (A[P] + A[P + 1] + ... + A[Q]) / (Q − P + 1).*/
+        static void MinAvgTwoSlice()
+        {
+            int[] arr = { 4,8,2,2,2,5,8};
+            Console.WriteLine("MinAvgTwoSlice");
+            Console.WriteLine($" smallest starting position of such a slice is : {MinAvgTwoSliceHelper(arr)}");
+        }
+        static int MinAvgTwoSliceHelper(int[] A)
+        {
+            float min_avg = (A[0] + A[1]) / 2;
+            int minpos = 0;
+
+            for (int i = 0; i < A.Length - 2; i++)
+            {
+                float firsttwo = (float)(A[i] + A[i + 1]) / 2;
+
+                if (firsttwo < min_avg)
+                {
+                    min_avg = firsttwo;
+                    minpos = i;
+                }
+
+                float three = (float)(A[i] + A[i + 1] + A[i + 2]) / 3;
+                if (three < min_avg)
+                {
+                    min_avg = three;
+                    minpos = i;
+                }
+
+                float lasttwo = (float)(A[i + 1] + A[i + 2]) / 2;
+                if (lasttwo < min_avg)
+                {
+                    min_avg = lasttwo;
+                    minpos = i + 1;
+                }
+            }
+
+            return minpos;
+        }
+
+
+
+
         #endregion
 
         static private IEnumerable<int> WhileYieldFunc(int n = 5, int minValue = 0, int maxValue = 5)
@@ -1498,7 +1533,7 @@ namespace InterView.Questions
             }
         }
 
-        static int[] GenerateRandomArrayOfNumbers(int n=5,int minValue=0,int maxValue=5)
+        static int[] GenerateRandomArrayOfNumbers(int n = 5, int minValue = 0, int maxValue = 5)
         {
             Stopwatch stopWatch = new Stopwatch();
             //List<int> randomNumbers = new List<int>();
@@ -1533,5 +1568,5 @@ namespace InterView.Questions
 
             return randomNumbers;
         }
-    }
+    } 
 }
