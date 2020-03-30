@@ -1,6 +1,7 @@
 ﻿using InterView.DataStructres;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -88,7 +89,10 @@ namespace InterView.Questions
             //FrogOneLeap();
             // PermCheck();
             //MissingInteger();
-            MaxCounters();
+            //MaxCounters();
+            //MushroomPicker();
+
+            PassingCars();
         }
 
 
@@ -1334,26 +1338,200 @@ namespace InterView.Questions
             }
             return (numberOfOnes == 1)?0:MaxNumOfZeros;
         }
-        
 
 
 
+
+        #endregion
+
+
+        #region Prefix sums
+
+
+        static void MushroomPicker()
+        {
+            Console.WriteLine("MushroomPicker");
+            int[] A = new int[7] { 2, 3, 7, 5, 1, 3, 9 };
+
+
+            //int[] A = new int[3] { 2, 3, 7};
+
+            var n = A.Length;
+            var k = 4;
+            var result = 0;
+            var m = 6;
+
+            int[] prefixes = PrefixSums(A);
+
+            for(int p = 0;p< Math.Min(k,m)+1;p++)
+            {
+                var left_pos = k - p;
+                var right_pos = Math.Min(n - 1, Math.Max(k, k + m - 2 * p));
+                result = Math.Max(result, CountTotal(prefixes, left_pos, right_pos));
+            }
+
+
+            for (int p = 0; p < Math.Min(m+1,n-k); p++)
+            {
+
+                var right_pos = k + p;
+                var left_pos = Math.Max(0, Math.Min(k, k - (m - 2 * p)));
+
+                result = Math.Max(result, CountTotal(prefixes, left_pos, right_pos));
+            }
+
+
+            Console.WriteLine($"Maximum Number of pickable mushrooms  is {result} given m={m}, k={k}");
+
+        }
+
+        static void CountDiv()
+        {
+            Console.WriteLine("CountDiv");
+        }
+
+
+        /*
+         The consecutive elements of array A represent consecutive cars on a road.
+        Array A contains only 0s and/or 1s:
+        0 represents a car traveling east,
+        1 represents a car traveling west.
+        The goal is to count passing cars. We say that a pair of cars (P, Q), where 0 ≤ P < Q < N, is passing when P is traveling to the east and Q is traveling to the west.
+*/
+        static void PassingCars()
+        {
+
+
+            Console.WriteLine("PassingCars");
+            //int[] A = new int[5] { 0,1,0,0,1 };
+
+            int[] A = GenerateRandomArrayOfNumbers((int)Math.Pow(10, 9) + 1, 0, 2);
+
+            var n = A.Length;
+
+            //PrintArr(A);
+
+            var prefixSumArr = PrefixSumsCars(A);
+            Console.WriteLine($"counted passing cars  is {prefixSumArr}");
+
+        }
+
+
+        static int PrefixSumsCars(int[] A)
+        {
+            double result = 0 ;
+
+            #region  inEfficient sol
+            //inEfficient sol
+            //int n = arr.Length;
+
+            ////The function should return −1 if the number of pairs of passing cars exceeds 1,000,000,000.
+            //if (n > Math.Pow(10, 9))
+            //    return -1;
+
+            //(int ,int )[] tmp = new (int east,int west)[n + 1];
+
+            //for (int k = 1; k < n + 1; k++)
+            //{
+            //    (int ,int ) acc = (arr[k - 1] == 0?1:0,  arr[k - 1] == 1?1:0);
+            //    tmp[k].Item1 = tmp[k - 1].Item1 + acc.Item1;
+            //    tmp[k].Item2 = tmp[k - 1].Item2 + acc.Item2;
+
+            //}
+
+            //double result = (tmp[tmp.Length - 1]).Item1 + (tmp[tmp.Length - 1]).Item2;
             #endregion
+            #region  Efficient sol
+            //pair include eather west or easy so...
+            int east = 0;
+            foreach (int car in A)
+            {
+                if (car == 0)
+                {
+                    east = east + 1;
+                }
+
+                if (east > 0)
+                {
+                    if (car == 1)
+                    {
+                        result = result + east;
+                        if (result > 1000000000)
+                        {
+                            return -1;
+                        }
+                    }
+                }
+            }
 
 
+            return (int)result;
+        
+        
+        }
 
+
+        static int[] PrefixSums(int[] arr)
+        {
+            int n = arr.Length;
+            int[] tmp = new int[n + 1];
+
+            for (int k = 1; k < n + 1; k++)
+            {
+                tmp[k] = tmp[k - 1] + arr[k - 1];
+
+            }
+            return tmp;
+        }
+
+        //Total of one slice — O(1).
+        static int CountTotal(int[] P, int x, int y) => P[y + 1] - P[x];
+
+        #endregion
+
+        static private IEnumerable<int> WhileYieldFunc(int n = 5, int minValue = 0, int maxValue = 5)
+        {
+            Random rnd = new Random();
+            while (n-- > 0)
+            {
+                yield return rnd.Next(minValue, maxValue);
+            }
+        }
 
         static int[] GenerateRandomArrayOfNumbers(int n=5,int minValue=0,int maxValue=5)
         {
+            Stopwatch stopWatch = new Stopwatch();
+            //List<int> randomNumbers = new List<int>();
+            int[] randomNumbers = new int[n];
+            n--;
+            //Console.WriteLine($"GenerateRandomArrayOfNumbers using Parallel.ForEach n={n}, minValue={minValue}, maxValue ={maxValue}");
+
+            //stopWatch.Start();
+            //Parallel.ForEach(WhileYieldFunc(n, minValue,maxValue), new ParallelOptions() { MaxDegreeOfParallelism=50}, new Action<int>((val) =>
+            //{
+            //    randomNumbers.Add(val);
+            //}));
+            //stopWatch.Stop();
+
+            //Console.WriteLine($"GenerateRandomArrayOfNumbers using Parallel.ForEach took {stopWatch.Elapsed.TotalSeconds} seconds.");
+
+            //randomNumbers.Clear();
+            //stopWatch.Restart();
+
+
+            stopWatch.Start();
+            Console.WriteLine($"GenerateRandomArrayOfNumbers using normal syntax n={n}, minValue={minValue}, maxValue ={maxValue}");
             Random rnd = new Random();
-            List<int> randomNumbers = new List<int>();
-            while(n > 0)
+            while (n > 0)
             {
-                randomNumbers.Add(rnd.Next(minValue, maxValue));
+                randomNumbers[n] = (rnd.Next(minValue, maxValue));
                 n--;
             }
 
-            return randomNumbers.ToArray();
+            stopWatch.Stop();
+            Console.WriteLine($"GenerateRandomArrayOfNumbers using normal took {stopWatch.Elapsed.TotalSeconds} seconds.");
+
+            return randomNumbers;
         }
     }
 }

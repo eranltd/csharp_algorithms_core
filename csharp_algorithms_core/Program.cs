@@ -33,6 +33,9 @@ namespace InterView
             
             //VariousAlgorithms.Run();
             VariousArrayAlgorithms.Run();
+
+
+            Console.WriteLine("Program Ended. press any key to exit");
             Console.ReadLine();
         }
     }

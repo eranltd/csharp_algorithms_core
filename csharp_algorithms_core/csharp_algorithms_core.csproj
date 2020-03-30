@@ -19,4 +19,8 @@
     <None Remove="Questions\85rf8hyu.c69~" />
     <None Remove="Questions\bpv3s3so.539~" />
   </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Runtime.Extensions" Version="4.3.1" />
+  </ItemGroup>
 </Project>
