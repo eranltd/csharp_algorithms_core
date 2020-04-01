@@ -59,9 +59,9 @@ namespace InterView.Questions
             //Console.WriteLine();
             //FindAndPrintMajority(majorityArr);
 
-            PowRecursive();
-            SumOfDigitsRecursive();
-            FiboRecursive();
+            //PowRecursive();
+            //SumOfDigitsRecursive();
+            //FiboRecursive();
             //FiboIterative();
         }
 
@@ -257,9 +257,11 @@ namespace InterView.Questions
             Console.WriteLine("FiboRecursive of n=11");
             Console.WriteLine(SumOfDigitsRecursiveHelper(11));
         }
+
+        //return the n-th number in fibonacci sequence
         internal static int FiboRecursiveHelper(int n)
         {
-            if (n == 1 || n == 1 )
+            if (n == 1 || n == 2 )
                 return 1;
 
             return FiboRecursiveHelper(n-1) + FiboRecursiveHelper(n - 2) +n;

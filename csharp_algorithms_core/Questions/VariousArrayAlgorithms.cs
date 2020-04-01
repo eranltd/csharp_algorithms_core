@@ -35,7 +35,7 @@ namespace InterView.Questions
         public static void PrintArr(int[] arr) { Console.WriteLine(); arr.ToList().ForEach(item => Console.Write($"[{item}] ")); Console.WriteLine(); }
         public static void Run()
         {
-            int[] arr = { 38, 27, 43, 3, 9, 82, 10 };
+            //int[] arr = { 38, 27, 43, 3, 9, 82, 10 };
 
             Console.WriteLine("VariousArrayAlgorithms");
 
@@ -92,7 +92,8 @@ namespace InterView.Questions
             //MaxCounters();
             //MushroomPicker();
             //PassingCars();
-            MinAvgTwoSlice();
+            //MinAvgTwoSlice();
+            FibonacciFrog();
         }
 
 
@@ -1169,7 +1170,95 @@ namespace InterView.Questions
         #endregion
 
 
+        #region Fibonacci numbers
 
+        /*Array A contains only 0s and/or 1s:
+
+        0 represents a position without a leaf;
+        1 represents a position containing a leaf.
+        The goal is to count the minimum number of jumps in which the frog can get to the other side of the river (from position −1 to position N). The frog can jump between positions −1 and N (the banks of the river) and every position containing a leaf.*/
+
+        static void FibonacciFrog()
+        {
+            int[] frogLake = {0,0,0,1,1,1,0,0,0,0 };
+            Console.WriteLine("FibonacciFrog");
+            Console.WriteLine($"FibonacciFrog returned : {FibonacciFrogHelper(frogLake)}");
+        }
+
+        static int FibonacciFrogHelper(int[] A)
+        {
+
+            const int origin = -1; //starting point, left bank of the river.
+            var destination = A.Length; //ending point, right bank of the river.
+            var maxNthFiboNum = destination + 1; //ending point must be after the river bank.
+            var fibonacci = GetFibonacciSequence(maxNthFiboNum); //using helper method, get sequence of fibo numbers.
+
+            // Perform a breadth-first search on the array
+            var marked = new HashSet<int>();
+            var queue = new Queue<Leaf>();
+            
+            //starting point
+            queue.Enqueue(new Leaf
+            {
+                Position = origin,
+                Hops = 0
+            });
+
+            while (queue.Count > 0)
+            {
+                var leaf = queue.Dequeue();
+                var currentPosition = leaf.Position;
+                var maxDistance = destination - (currentPosition);
+
+                //iterate on all fibonacci series till max
+                foreach (var fiboDistance in fibonacci.Where(x => x <= maxDistance && x > 0) ) //distance is the fibo[n] element
+                {
+                    var nextPosition = currentPosition + fiboDistance; //determine the next position to jump to
+                    var minimalHops = leaf.Hops + 1;
+
+                    if (nextPosition == destination) //done.
+                    {
+                        return minimalHops;
+                    }
+
+                    //the leaf is clear, and we visit him already.
+                    if (A[nextPosition] != 1 || marked.Contains(nextPosition)) continue;
+
+                    //the leaf is clear, and we haven't visit him already.
+                    queue.Enqueue(new Leaf
+                    {
+                        Position = nextPosition,
+                        Hops = minimalHops
+                    });
+
+                    marked.Add(nextPosition);
+                }
+            }
+
+            return -1; //no such hops sequence was found
+        }
+
+        /*0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987, 1597, 2584, 4181, 6765, 10946, 17711, 28657, 46368, 75025, 121393, 196418, 317811, ...*/
+        static int[] GetFibonacciSequence(int max) //iterative approach
+        {
+            var fibonacci = new List<int>{0,1}; //fibo list
+            var fibIndex = 1; //starting from fibonacci[1]
+            while (fibonacci[fibIndex++] <= max)
+            {
+                var previousElement = fibonacci[fibIndex - 1];  //at first iteration = 1
+                var previousPreviousElement = fibonacci[fibIndex - 2]; //at first iteration = 0
+                fibonacci.Add(previousElement + previousPreviousElement);
+            }
+
+            return fibonacci.ToArray();
+        }
+
+         private struct Leaf
+         {
+            public int Position;
+            public int Hops;
+         }
+        #endregion
 
 
         #region PermCheck
@@ -1195,13 +1284,9 @@ namespace InterView.Questions
             HashSet<int> leaves = new HashSet<int>(A);
             return leaves.Count() == len && A.Max() == len ? 1 : 0;
         }
-
+ 
 
         #endregion
-
-
-
-
 
         #region TapeEquilibrium
 
@@ -1276,8 +1361,6 @@ namespace InterView.Questions
 
 
         #endregion
-
-
 
         #region Length of longest consecutive zeroes in the binary representation of a number.
 
@@ -1447,7 +1530,7 @@ namespace InterView.Questions
                 {
                     if (car == 1)
                     {
-                        result = result + east; //we don't want to sum west as well cause it will be sum 2 pairs instead of one.
+                        result += east; //we don't want to sum west as well cause it will be sum 2 pairs instead of one.
                         if (result > 1000000000)
                         {
                             return -1;
@@ -1480,6 +1563,7 @@ namespace InterView.Questions
 
 
         /*The average of a slice (P, Q) is the sum of A[P] + A[P + 1] + ... + A[Q] divided by the length of the slice. To be precise, the average equals (A[P] + A[P + 1] + ... + A[Q]) / (Q − P + 1).*/
+        /*The goal is to find the starting position of a slice whose average is minimal.*/
         static void MinAvgTwoSlice()
         {
             int[] arr = { 4,8,2,2,2,5,8};

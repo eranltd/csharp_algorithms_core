@@ -37,6 +37,7 @@ namespace InterView
 
             Console.WriteLine("Program Ended. press any key to exit");
             Console.ReadLine();
+            Environment.Exit(0);
         }
     }
 }
