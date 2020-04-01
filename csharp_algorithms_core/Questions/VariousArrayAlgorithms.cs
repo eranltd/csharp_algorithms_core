@@ -29,47 +29,24 @@ namespace InterView.Questions
 
     public static class VariousArrayAlgorithms
     {
-        public static List<int> TestNumbers = new List<int>() { 32, 5, 51712, 1041, 15, 2147483647, 1376796946, 1073741825, 1610612737, 6291457, 1162, 561892, 6291457, 74901729 };
+        public static List<int> WierdNumbers = new List<int>() { 32, 5, 51712, 1041, 15, 2147483647, 1376796946, 1073741825, 1610612737, 6291457, 1162, 561892, 6291457, 74901729 };
 
-
-        public static void PrintArr(int[] arr) { Console.WriteLine(); arr.ToList().ForEach(item => Console.Write($"[{item}] ")); Console.WriteLine(); }
         public static void Run()
         {
             //int[] arr = { 38, 27, 43, 3, 9, 82, 10 };
 
-            Console.WriteLine("VariousArrayAlgorithms");
+            Console.WriteLine("VariousArrayAlgorithms Check Regions within this file");
 
-            //Console.WriteLine("Find a local minima in an array");
-            //int[] localMinimaArr = { 9, 6, 3, 14, 5, 7, 4 };
-            //FindLocalMinimaBinarySearch(localMinimaArr);
-            //Console.WriteLine();
-            //Console.WriteLine("************************************************************");
-            ////int[] SubArrayZero = { 6, 3, -1, -3, 4, -2, 2, 4, 6, -12, -7 };
-            //int[] SubArrayZero = { 6,3,-9,-2,2,4,-4 };
-            //PrintArr(SubArrayZero);
-            //Console.WriteLine("Print all subarrays with 0 sum");
-            //Console.WriteLine("Print all subarrays with 0 sum - O(n^2)");
-            //PrintAllSubarraysZeroSum(SubArrayZero);
-            //Console.WriteLine("Print all subarrays with 0 sum - Hashing Algorithm");
-            //PrintAllSubarraysZeroSumHashing(SubArrayZero);
-            //Console.WriteLine("************************************************************");
-            //Console.WriteLine($"countSubarray with  sum < 10  = {countSubarray(SubArrayZero,10)}");
+            //FindLocalMinimaFuncs();
+            //PrintAllSubarraysZeroSum();
+            //PrintAllSubarraysZeroSumHashing();
+            //Console.WriteLine($"countSubArrays with  sum < 10  = {CountSubArrays(new int[] { 6, 3, -9, -2, 2, 4, -4 }, 10)}");
 
-            //Console.WriteLine("************************************************************");
-            //Console.WriteLine($"bruteforce -> get max sum of sub-array ");
-
-
-            //int k = 4;
-            //int n = arr.Length;
-            //Console.WriteLine(maxSum(arr, n, k));
-
-
-            //Console.WriteLine($"sliding window -> get max sum of sub-array ");
-            //Console.WriteLine(MaxSumSlidingWindow(arr, n, k));
+            //Console.WriteLine(maxSum(new int[]{ 38, 27, 43, 3, 9, 82, 10 }, 7, 4));
+            //Console.WriteLine(MaxSumSlidingWindow(new int[]{ 38, 27, 43, 3, 9, 82, 10 }, 7, 4));
 
             //SelectionSort(arr);
             // BubbleSort(arr);
-
 
             //BubbleSortRecursive(arr, arr.Length);
             //InsertionSort(arr);
@@ -93,11 +70,18 @@ namespace InterView.Questions
             //MushroomPicker();
             //PassingCars();
             //MinAvgTwoSlice();
-            FibonacciFrog();
+            //FibonacciFrog();
         }
 
 
         #region FindLocalMinima
+
+        static void FindLocalMinimaFuncs()
+        {
+            Console.WriteLine("Find a local minima in an array");
+            int[] localMinimaArr = { 9, 6, 3, 14, 5, 7, 4 };
+            FindLocalMinimaBinarySearch(localMinimaArr);
+        }
         static void FindLocalMinima(int[] arr)
         {
             int localMinimaIndex = 0;
@@ -117,7 +101,7 @@ namespace InterView.Questions
 
         }
 
-        static int localMinUtil(int[] arr, int low,
+        static int localMinBinarySearchHelper(int[] arr, int low,
                                    int high, int n)
         {
             // Find index of middle element 
@@ -134,25 +118,25 @@ namespace InterView.Questions
             // neighbour is smaller than it, then left half 
             // must have a local minima. 
             else if (mid > 0 && arr[mid - 1] < arr[mid])
-                return localMinUtil(arr, low, mid - 1, n);
+                return localMinBinarySearchHelper(arr, low, mid - 1, n);
 
             // If middle element is not minima and its right 
             // neighbour is smaller than it, then right half 
             // must have a local minima. 
-            return localMinUtil(arr, mid + 1, high, n);
+            return localMinBinarySearchHelper(arr, mid + 1, high, n);
         }
         static void FindLocalMinimaBinarySearch(int[] arr)
         {
             int localMinimaIndex = 0;
             int n = arr.Length;
-            localMinimaIndex = localMinUtil(arr, 0, n - 1, n);
+            localMinimaIndex = localMinBinarySearchHelper(arr, 0, n - 1, n);
             Console.WriteLine($"Local Minima Found at arr[{localMinimaIndex}] = {arr[localMinimaIndex]}");
         }
         #endregion
 
         #region sub-arrays
-        //solve using 'sliding window' count number of subarrays sum < maxSum
-        static int countSubarray(int[] arr, int maxSum)
+        //solve using 'sliding window' count number of subArrays sum < maxSum
+        static int CountSubArrays(int[] arr, int maxSum)
         {
             int n = arr.Length;
             int start = 0, end = 0;
@@ -194,13 +178,20 @@ namespace InterView.Questions
         }
 
         //A simple solution is to consider all subarrays one by one and check if sum of every subarray is equal to 0 or not. The complexity of this solution would be O(n^2).
-        static void PrintAllSubarraysZeroSum(int[] arr)
+        static void PrintAllSubarraysZeroSum()
         {
+            ////int[] SubArrayZero = { 6, 3, -1, -3, 4, -2, 2, 4, 6, -12, -7 };
+            int[] SubArrayZero = { 6, 3, -9, -2, 2, 4, -4 };
+            PrintArr(SubArrayZero);
+
+            Console.WriteLine("Print all subArrays with 0 sum");
+            Console.WriteLine("Print all subArrays with 0 sum - O(n^2)");
+
             //find which sub-array sum is zero
             //List<int[]> subArrays = GetSubArrays(arr);
             List<int[]> sub_arrays = new List<int[]>();
 
-            GetSubArraysRecursive(ref sub_arrays, arr, 0, 0);
+            GetSubArraysRecursive(ref sub_arrays, SubArrayZero, 0, 0);
 
             //find which sub-array sum is zero
             foreach (var subArray in sub_arrays)
@@ -218,8 +209,13 @@ namespace InterView.Questions
 
         }
 
-        static void PrintAllSubarraysZeroSumHashing(int[] arr)
+        static void PrintAllSubarraysZeroSumHashing()
         {
+            ////int[] SubArrayZero = { 6, 3, -1, -3, 4, -2, 2, 4, 6, -12, -7 };
+            int[] SubArrayZero = { 6, 3, -9, -2, 2, 4, -4 };
+            PrintArr(SubArrayZero);
+
+            Console.WriteLine("Print all subarrays with 0 sum - Hashing Algorithm");
 
             // create an empty map  
             Dictionary<int, List<int>> TrackingSubSumArray = new Dictionary<int, List<int>>();
@@ -232,19 +228,15 @@ namespace InterView.Questions
             int sum = 0;
 
 
-            for (int i = 0; i < arr.Length; i++)
+            for (int i = 0; i < SubArrayZero.Length; i++)
             {
                 // add current element to sum  
-                sum += arr[i];
+                sum += SubArrayZero[i];
 
                 // if sum is 0, we found a subarray starting  
                 // from index 0 and ending at index i  
                 if (sum == 0)
                     SubArraysFoundByIndex.Add((0, i));
-
-
-
-
 
                 //find sub-arrays
                 List<int> al = new List<int>(); //
@@ -263,12 +255,10 @@ namespace InterView.Questions
                     al = TrackingSubSumArray[sum];
 
 
-
-                    for (int it = 0; it < al.Count; it++)
+                    foreach (var t in al)
                     {
-                        SubArraysFoundByIndex.Add((al[it] + 1, i));
+                        SubArraysFoundByIndex.Add((t + 1, i));
                     }
-
                 }
 
 
@@ -286,15 +276,10 @@ namespace InterView.Questions
             // if we did not find any subarray with 0 sum,  
             // then subarray does not exists  
             if (SubArraysFoundByIndex.Count == 0)
-                Console.WriteLine("No subarray exists");
+                Console.WriteLine("No subArray exists");
             else
-                SubArraysFoundByIndex.ForEach(p => Console.WriteLine("Subarray found from Index " +
+                SubArraysFoundByIndex.ForEach(p => Console.WriteLine("SubArray found from Index " +
                                p.first + " to " + p.second));
-
-
-
-            ;
-
 
         }
 
@@ -358,6 +343,8 @@ namespace InterView.Questions
 
         static int maxSum(int[] arr, int n, int k)
         {
+            Console.WriteLine($"Brute force -> get max sum of sub-array ");
+
             int maxSum = 0;
             // Consider all blocks starting 
             // with i. 
@@ -377,6 +364,7 @@ namespace InterView.Questions
 
         static int MaxSumSlidingWindow(int[] arr, int n, int k)
         {
+            Console.WriteLine($"sliding window -> get max sum of sub-array ");
             int maxSum = 0;
 
             if (n < k)
@@ -922,7 +910,7 @@ namespace InterView.Questions
 
 
 
-        #region rotateArrayToTheRight
+        #region MissingElementFind
 
         static void MissingElementFind()
         {
@@ -964,21 +952,12 @@ namespace InterView.Questions
             accumulatingSum += len + 1;
             accumulatingSum += len;
 
-
-
-
-
-
-
             return (accumulatingSum - runningSum);
 
         }
 
 
         #endregion
-
-
-
 
         #region FrogOneLeap
 
@@ -1180,7 +1159,7 @@ namespace InterView.Questions
 
         static void FibonacciFrog()
         {
-            int[] frogLake = {0,0,0,1,1,1,0,0,0,0 };
+            int[] frogLake = { 0, 0, 0, 1, 1, 1, 0, 0, 0, 0 };
             Console.WriteLine("FibonacciFrog");
             Console.WriteLine($"FibonacciFrog returned : {FibonacciFrogHelper(frogLake)}");
         }
@@ -1196,7 +1175,7 @@ namespace InterView.Questions
             // Perform a breadth-first search on the array
             var marked = new HashSet<int>();
             var queue = new Queue<Leaf>();
-            
+
             //starting point
             queue.Enqueue(new Leaf
             {
@@ -1211,7 +1190,7 @@ namespace InterView.Questions
                 var maxDistance = destination - (currentPosition);
 
                 //iterate on all fibonacci series till max
-                foreach (var fiboDistance in fibonacci.Where(x => x <= maxDistance && x > 0) ) //distance is the fibo[n] element
+                foreach (var fiboDistance in fibonacci.Where(x => x <= maxDistance && x > 0)) //distance is the fibo[n] element
                 {
                     var nextPosition = currentPosition + fiboDistance; //determine the next position to jump to
                     var minimalHops = leaf.Hops + 1;
@@ -1241,7 +1220,7 @@ namespace InterView.Questions
         /*0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987, 1597, 2584, 4181, 6765, 10946, 17711, 28657, 46368, 75025, 121393, 196418, 317811, ...*/
         static int[] GetFibonacciSequence(int max) //iterative approach
         {
-            var fibonacci = new List<int>{0,1}; //fibo list
+            var fibonacci = new List<int> { 0, 1 }; //fibo list
             var fibIndex = 1; //starting from fibonacci[1]
             while (fibonacci[fibIndex++] <= max)
             {
@@ -1253,13 +1232,12 @@ namespace InterView.Questions
             return fibonacci.ToArray();
         }
 
-         private struct Leaf
-         {
+        private struct Leaf
+        {
             public int Position;
             public int Hops;
-         }
+        }
         #endregion
-
 
         #region PermCheck
 
@@ -1284,7 +1262,7 @@ namespace InterView.Questions
             HashSet<int> leaves = new HashSet<int>(A);
             return leaves.Count() == len && A.Max() == len ? 1 : 0;
         }
- 
+
 
         #endregion
 
@@ -1424,7 +1402,6 @@ namespace InterView.Questions
 
 
         #endregion
-
 
         #region Prefix sums
 
@@ -1566,7 +1543,7 @@ namespace InterView.Questions
         /*The goal is to find the starting position of a slice whose average is minimal.*/
         static void MinAvgTwoSlice()
         {
-            int[] arr = { 4,8,2,2,2,5,8};
+            int[] arr = { 4, 8, 2, 2, 2, 5, 8 };
             Console.WriteLine("MinAvgTwoSlice");
             Console.WriteLine($" smallest starting position of such a slice is : {MinAvgTwoSliceHelper(arr)}");
         }
@@ -1607,6 +1584,9 @@ namespace InterView.Questions
 
 
         #endregion
+
+        #region Helper Funcs
+        public static void PrintArr(int[] arr) { Console.WriteLine(); arr.ToList().ForEach(item => Console.Write($"[{item}] ")); Console.WriteLine(); }
 
         static private IEnumerable<int> WhileYieldFunc(int n = 5, int minValue = 0, int maxValue = 5)
         {
@@ -1652,5 +1632,7 @@ namespace InterView.Questions
 
             return randomNumbers;
         }
-    } 
+
+        #endregion
+    }
 }
