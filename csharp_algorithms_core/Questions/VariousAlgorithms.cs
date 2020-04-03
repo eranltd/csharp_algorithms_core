@@ -14,8 +14,7 @@ namespace InterView.Questions
 
         public static void Run()
         {
-            Console.WriteLine("VariousAlgorithms");
-
+            Console.WriteLine("Various Algorithms");
 
             //var charArray = "Data Structures and Algorithms in JAVA".ToCharArray();
             //Console.WriteLine($"charCircularMaker : n=6: {charCircularMaker(charArray, 6)}");
@@ -63,6 +62,27 @@ namespace InterView.Questions
             //SumOfDigitsRecursive();
             //FiboRecursive();
             //FiboIterative();
+
+            //StackWithMax.Run(); 
+            //RotateMatrix90Degrees.Run();
+            //FindSmallestInArrayNotOccur.Run();
+            //TraverseSingleLinkedList.Run();
+            //RemoveOccurFromStr.Run();
+            //SortStack.Run();
+            // Implement_set_all_set_get_o_1.Run();
+            //SortStackRecursive.Run();
+            //BSTQuestions.Run();
+            //HasSumOfTwoInArray.Run();
+            //NutsBoltsProblem.Run();
+            //FindTheFirstCircularTourThatVisitsAllPetrolPumps.Run();
+            //BiggestReplicaInArray.Run();
+            //GivenNBiggestDigitPermutation.Run();
+            //PrintPatternNoLoop.Run();
+            //IsValidParentheses.Run();
+            //PermutationsOfString.Run();
+            //Sortanarrayof0s1sand2s.Run();
+            //EvenNumbersASCOddNumbersDESC.Run();
+
         }
 
 

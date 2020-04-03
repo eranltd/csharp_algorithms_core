@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -29,13 +30,15 @@ namespace InterView.Questions
 
     public static class VariousArrayAlgorithms
     {
-        public static List<int> WierdNumbers = new List<int>() { 32, 5, 51712, 1041, 15, 2147483647, 1376796946, 1073741825, 1610612737, 6291457, 1162, 561892, 6291457, 74901729 };
+        public static List<int> WierdNumbers = new List<int>()
+        {
+            32, 5, 51712, 1041, 15, 2147483647, 1376796946, 1073741825, 1610612737, 6291457, 1162, 561892, 6291457,
+            74901729
+        };
 
         public static void Run()
         {
-            //int[] arr = { 38, 27, 43, 3, 9, 82, 10 };
-
-            Console.WriteLine("VariousArrayAlgorithms Check Regions within this file");
+            Console.WriteLine("*Various Array Algorithms* Check Regions within this file");
 
             //FindLocalMinimaFuncs();
             //PrintAllSubarraysZeroSum();
@@ -71,8 +74,104 @@ namespace InterView.Questions
             //PassingCars();
             //MinAvgTwoSlice();
             //FibonacciFrog();
+            //MinMaxDivisionBinarySearch();
+            GenomicRange();
+
+
+            //int[] prefixSum = {1, 2, 3, 4, 5};
+            //int[] prefixSumAfter = PrefixSums(prefixSum);
+
         }
 
+
+        #region BinarySearch
+
+        static void MinMaxDivisionBinarySearch()
+        {
+            Console.WriteLine("The goal is to minimize the large sum, using MinMaxDivisionBinarySearchHelper");
+            int[] MinMaxArr = {2, 1, 5, 1, 2, 2, 2,2};
+
+
+            PrintArr(MinMaxArr);
+            Console.WriteLine("Minimized large sum by K=3, M=5 is ---> " +
+                              MinMaxDivisionBinarySearchHelper(3, 5, MinMaxArr));
+        }
+
+        /*  You are given integers K, M and a non-empty array A consisting of N integers.
+            Every element of the array is not greater than M.
+            You should divide this array into K blocks of consecutive elements. 
+            The size of the block is any integer between 0 and N. 
+
+            Every element of the array should belong to some block.
+            The sum of the block from X to Y equals A[X] + A[X + 1] + ... + A[Y].
+            The sum of empty block equals 0.
+            The large sum is the maximal sum of any block.
+            The goal is to minimize the large sum.
+            */
+
+        static int MinMaxDivisionBinarySearchHelper(int K, int M, int[] A)
+        {
+            //do not use the variable passed to the solution function as M!
+            //It is NOT the maximum element in the test cases! The specification says, that no element is larger than M, yet there is not guarantee that M == max(A).
+
+            int result = 0;    // if all elements are 0 in A then results are going to be 0
+            int maxTotalSum = A.Sum(); //the sum of all the array ([A[i]+...+A[length],[],[]) could be one big array and two empty ones.
+            int minTotalSum = A.Max(); //minimal could be just one element ([A[i]])
+
+            /*Special Cases*/
+            if (K == 1) 
+                return maxTotalSum; // if there is only 1 block [element] the result is going to be max
+
+            if (K >= A.Length) //(A[0-9],A[0-9],A[0-9],A[0-9],A[0-9],A[0-9]...A[n]) K=10, n=6
+                return minTotalSum; // if every element can be stored in separate block the result is going to be min
+
+          
+            //until sum is found times
+            while (minTotalSum <= maxTotalSum)
+            {
+                int potentialSum = (maxTotalSum + minTotalSum) / 2;
+
+                int subArrayBlockSize = 1; //sub-array size
+                int curBlockSum = A[0]; //the first element in array - starting point. 
+
+                //(N-1) times
+                for(int i=1;i<A.Length;i++)
+                {
+                    if (curBlockSum + A[i] > potentialSum)
+                    {
+                        subArrayBlockSize++;
+                        curBlockSum = A[i]; //start new block
+
+                    }
+                    else
+                    {
+                        curBlockSum += A[i]; //add to current block
+                    }
+                }
+
+
+                if (subArrayBlockSize <= K) // we can lower result
+                {
+                    maxTotalSum = potentialSum - 1; // - 1 since we proved with above for loop and if statement that mid is going to fulfill the requirement
+                    result = potentialSum;
+                }
+                else 
+                {
+                    minTotalSum = potentialSum + 1; // + 1 since we proved with above for loop and if statement that mid is NOT going to fulfill the requirement
+                                   // hence no update on result either
+                }
+
+            }
+
+            return result;
+        }
+
+        
+
+
+
+
+        #endregion
 
         #region FindLocalMinima
 
@@ -1355,10 +1454,9 @@ namespace InterView.Questions
         static void LengthOfLongestConsecutiveZeroesInTheBinaryRepresentation()
         {
             //count the number of zeros, when this number is represented as Binary.
-            foreach (var N in TestNumbers)
+            foreach (var N in WierdNumbers)
             {
                 Console.WriteLine($"LengthOfLongestConsecutiveZeroesInTheBinaryRepresentation of Decimal = [{N}], Binary = [{Convert.ToString(N, 2)}] is {LengthOfLongestConsecutiveZeroesInTheBinaryRepresentationHelper(N)}");
-
             }
 
 
@@ -1404,6 +1502,80 @@ namespace InterView.Questions
         #endregion
 
         #region Prefix sums
+
+
+        /*
+         * The DNA sequence is given as a non-empty string S = S[0]S[1]...S[N-1] consisting of N characters. There are M queries, which are given in non-empty arrays P and Q, each consisting of M integers. The K-th query (0 ≤ K < M) requires you to find the minimal impact factor of nucleotides contained in the DNA sequence between positions P[K] and Q[K] (inclusive).
+            For example, consider string S = CAGCCTA and arrays P, Q such that:
+                P[0] = 2    Q[0] = 4
+                P[1] = 5    Q[1] = 5
+                P[2] = 0    Q[2] = 6
+            The answers to these M = 3 queries are as follows:
+            The part of the DNA between positions 2 and 4 contains nucleotides G and C (twice), whose impact factors are 3 and 2 respectively, so the answer is 2.
+            The part between positions 5 and 5 contains a single nucleotide T, whose impact factor is 4, so the answer is 4.
+            The part between positions 0 and 6 (the whole string) contains all nucleotides, in particular nucleotide A whose impact factor is 1, so the answer is 1.*
+         */
+        static void GenomicRange()
+        {
+            string S = "CAGCCTA";
+            int[] P = new[] { 2,5,0};
+            int[] Q = new[] {4,5,6 };
+
+            Console.WriteLine($"GenomicRange for S={S}");
+            Console.WriteLine($"GenomicRange for P={P[0]},{P[1]},{P[2]}");
+            Console.WriteLine($"GenomicRange for Q={Q[0]},{Q[1]},{Q[2]}");
+            var result = GenomicRangeHelper(S, P, Q);
+            Console.WriteLine($"GenomicRange Result : {result[0]},{result[1]},{result[2]}");
+        }
+        static int[] GenomicRangeHelper(string S, int[] P, int[] Q)
+        {
+            int NUMBER_OF_NUCLEOTIDES = 4;
+
+            // Mark the position of each element
+            //There are 4 nucleotides (A, C, G and T), so a[0][i] will mark the position i of nucleotide A as 1 if it appears in the string,
+            //otherwise a[0][i] will have the value of 0. The same for a[1][i] for nucleotide C, and so on.
+
+            int[,] nucPositions = new int[NUMBER_OF_NUCLEOTIDES,S.Length];
+            for (int i = 0; i < S.Length; i++)
+            {
+              
+                    _ = S[i] switch
+                    {
+                        'A' => nucPositions[0,i]++,
+                        'C' => nucPositions[1, i]++,
+                        'G' => nucPositions[2, i]++,
+                        'T' => nucPositions[3, i]++
+                    };
+            
+            }
+            // Compute prefix sum
+            //Once we have the position of each nucleotide in the 2D array a, we can proceed to compute the prefix sum of each of the nucleotides:
+            int[,] prefixSums = new int[NUMBER_OF_NUCLEOTIDES, (S.Length+1)];
+            for(int i=1;i<S.Length +1;i++)
+            for (int k = 0; k < NUMBER_OF_NUCLEOTIDES; k++)
+                prefixSums[k,i] = prefixSums[k, i - 1] + nucPositions[k, i-1];
+
+            // Count total
+
+            int[] queryResult = new int[P.Length]; //there are P.Length Queries...
+            for (int i = 0; i < P.Length; i++)
+            {
+                int x = P[i]; // { 2,5,0};
+                int y = Q[i]; // {4,5,6 };
+
+                for (int nucleotide = 0; nucleotide < NUMBER_OF_NUCLEOTIDES; nucleotide++)
+                {
+                    if (prefixSums[nucleotide, y + 1] - prefixSums[nucleotide, x] > 0) //if yes, then it means that a nucleotide of that impact factor must have occured
+                    {
+                        queryResult[i] = nucleotide + 1; //because A=1,C=2,G=3,T=4  
+                        break;
+                    }
+                }
+            }
+            return queryResult;
+        }
+
+
 
 
         static void MushroomPicker()

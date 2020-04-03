@@ -13,7 +13,7 @@ namespace InterView.Questions
     {
         public static void Run()
         {
-            Console.WriteLine("BSTQuestions");
+            Console.WriteLine("BST Questions");
 
             BSTNode root = null;
             BinarySearchTree bst = new BinarySearchTree();
