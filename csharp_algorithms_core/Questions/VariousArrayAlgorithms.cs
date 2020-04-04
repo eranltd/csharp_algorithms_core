@@ -1952,7 +1952,10 @@ namespace InterView.Questions
                 }
             }
 
-            var dominator = dict.Aggregate((leftPair, rightPair) => leftPair.Value > rightPair.Value ? leftPair : rightPair);
+            KeyValuePair<int, int> dominator = new KeyValuePair<int, int>(0,0);
+
+            if(dict.Count > 0)
+                dominator = dict.Aggregate((leftPair, rightPair) => leftPair.Value > rightPair.Value ? leftPair : rightPair);
 
             return (dominator.Value > A.Length / 2) ? Array.IndexOf(A, dominator.Key) : -1;
             
