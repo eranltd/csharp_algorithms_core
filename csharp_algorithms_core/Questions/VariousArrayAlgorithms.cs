@@ -45,11 +45,16 @@ namespace InterView.Questions
             //PrintAllSubarraysZeroSumHashing();
             //Console.WriteLine($"countSubArrays with  sum < 10  = {CountSubArrays(new int[] { 6, 3, -9, -2, 2, 4, -4 }, 10)}");
 
+
+            //int[] prefixSum = {1, 2, 3, 4, 5};
+            //int[] prefixSumAfter = PrefixSums(prefixSum);
+
             //Console.WriteLine(maxSum(new int[]{ 38, 27, 43, 3, 9, 82, 10 }, 7, 4));
             //Console.WriteLine(MaxSumSlidingWindow(new int[]{ 38, 27, 43, 3, 9, 82, 10 }, 7, 4));
 
-            //SelectionSort(arr);
+            //SelectionSort(new int[] { 38, 27, 43, 3, 9, 82, 10 });
             // BubbleSort(arr);
+            CountingSort(new int[] { 2, 5, -4, 11, 0, 8, 22, 67, 51, 6 });
 
             //BubbleSortRecursive(arr, arr.Length);
             //InsertionSort(arr);
@@ -75,12 +80,16 @@ namespace InterView.Questions
             //MinAvgTwoSlice();
             //FibonacciFrog();
             //MinMaxDivisionBinarySearch();
-            GenomicRange();
+            //GenomicRange();
 
 
-            //int[] prefixSum = {1, 2, 3, 4, 5};
-            //int[] prefixSumAfter = PrefixSums(prefixSum);
+            //Distinct();
 
+            //Triangle();
+
+
+            //StoneWall();
+            Dominator();
         }
 
 
@@ -502,7 +511,7 @@ namespace InterView.Questions
             int n = arr.Length;
             for (int i = 0; i < n; i++)
             {
-                for (int j = i; j < n; j++)
+                for (int j = i+1; j < n; j++)
                 {
                     if (arr[j] < arr[i])
                         SWAP(ref arr[j], ref arr[i]);
@@ -526,6 +535,57 @@ namespace InterView.Questions
 
             Console.WriteLine("After MergeSort");
             PrintArr(sorted.ToArray());
+        }
+
+        static void CountingSort(int[] arr)
+        {
+            Console.WriteLine("Before CountingSort");
+            PrintArr(arr);
+
+            int[] histogram = new int[arr.Length];
+            int[] histoPrefixSum = new int[arr.Length+1];
+            int[] output = new int[arr.Length];
+
+
+            // find smallest and largest value
+            int minVal = arr[0];
+            int maxVal = arr[0];
+            for (int i = 1; i < arr.Length; i++)
+            {
+                if (arr[i] < minVal) minVal = arr[i];
+                else if (arr[i] > maxVal) maxVal = arr[i];
+            }
+
+            // init array of frequencies
+            int[] counts = new int[maxVal - minVal + 1];
+
+            //step 1 - histogram - num of occurences
+
+            // init the frequencies
+            for (int i = 0; i < arr.Length; i++)
+            {
+                counts[arr[i] - minVal]++;
+            }
+
+
+            //step 2 - prefixSum on this histogram
+
+            counts[0]--;
+            for (int i = 1; i < counts.Length; i++)
+                counts[i] +=counts[i - 1] ;
+
+            //step 3 - re-arrange array elements.
+
+
+            // Sort the array
+            for (int i = arr.Length - 1; i >= 0; i--)
+            {
+                output[counts[arr[i] - minVal]--] = arr[i];
+            }
+
+
+            Console.WriteLine("After CountingSort");
+            PrintArr(output);
         }
 
         private static List<int> MergeSortHelperRec(List<int> unsorted)
@@ -555,50 +615,50 @@ namespace InterView.Questions
         }
 
         private static List<int> MergeSortedLists(List<int> left, List<int> right)
-        {
-            List<int> result = new List<int>();
-
-            while (left.Count > 0 || right.Count > 0) //as long you have orgrans in 
             {
-                var leftItem = left.FirstOrDefault();
-                var rightItem = right.FirstOrDefault();
+                List<int> result = new List<int>();
 
-                if (left.Count > 0 && right.Count > 0)
+                while (left.Count > 0 || right.Count > 0) //as long you have orgrans in 
                 {
+                    var leftItem = left.FirstOrDefault();
+                    var rightItem = right.FirstOrDefault();
+
+                    if (left.Count > 0 && right.Count > 0)
+                    {
 
 
-                    //iterate on both of them together and check who is bigger
-                    if (leftItem <= rightItem)  //Comparing First two elements to see which is smaller
+                        //iterate on both of them together and check who is bigger
+                        if (leftItem <= rightItem)  //Comparing First two elements to see which is smaller
+                        {
+                            result.Add(leftItem);
+                            left.Remove(leftItem);
+
+                        }
+                        else if (leftItem >= rightItem)
+                        {
+                            result.Add(rightItem);
+                            right.Remove(rightItem);
+                        }
+
+
+                    }
+                    else if (left.Count > 0)//right list is empty 
                     {
                         result.Add(leftItem);
                         left.Remove(leftItem);
-
                     }
-                    else if (leftItem >= rightItem)
+                    else if (right.Count > 0) //left list is empty 
                     {
                         result.Add(rightItem);
                         right.Remove(rightItem);
                     }
+                }
 
 
-                }
-                else if (left.Count > 0)//right list is empty 
-                {
-                    result.Add(leftItem);
-                    left.Remove(leftItem);
-                }
-                else if (right.Count > 0) //left list is empty 
-                {
-                    result.Add(rightItem);
-                    right.Remove(rightItem);
-                }
+
+
+                return result;
             }
-
-
-
-
-            return result;
-        }
 
         //The above function always runs O(n^2) time even if the array is sorted. It can be optimized by stopping the algorithm if inner loop didn’t cause any swap.
         static void BubbleSort(int[] arr)
@@ -1757,6 +1817,151 @@ namespace InterView.Questions
 
         #endregion
 
+        #region Sorting
+
+        //Compute number of distinct values in an array.
+        static void Distinct()
+        {
+            int[] arr = { 2, 1, 1, 2, 3, 1 };
+            Console.WriteLine("Compute number of distinct values in an array");
+            Console.WriteLine($" Distinct # : {DistinctHelper(arr)}");
+        }
+          static int DistinctHelper(int[] A)
+            {
+
+            //first value is the number, second its his occur in array.
+            HashSet<int> set = new HashSet<int>();
+
+            foreach (var num in A)
+                set.Add(num);
+            
+            return set.Count;
+            }
+
+
+        static void Triangle()
+        {
+            int[] arr = { 10,2,5,1,8,20 };
+            PrintArr(arr);
+            Console.WriteLine($"Triplet exists in the array : {TriangleHelper(arr)}");
+        }
+        static int TriangleHelper(int[] A)
+        {
+            int size = A.Length;
+            //merge sort the array
+
+            Array.Sort(A);
+            /*
+             * A triplet (P, Q, R) is triangular if 0 ≤ P < Q < R < N and:
+             * 
+             * A[P] + A[Q] > A[R], A[Q] + A[R] > A[P], A[R] + A[P] > A[Q].
+             * 
+             * The conversion to long is done so that it prevents against integer
+             * overflow, since Integer.MAX_VALUE is the highest possible value of N.
+             */
+
+            for (int i = 0; i < size - 2; i++)
+            {
+                long Psmallest = A[i]; //smallest
+                long QsecondSmallest = A[i + 1]; //second smallest
+                long RthirdSmallest = A[i + 2]; //third smallest
+
+                if (Psmallest + QsecondSmallest > RthirdSmallest && QsecondSmallest + RthirdSmallest > Psmallest && RthirdSmallest + Psmallest > QsecondSmallest)
+                {
+                    return 1;
+                }
+            }
+
+            return 0;
+
+        }
+
+        #endregion
+
+        #region Stack and Queues
+        //Cover "Manhattan skyline" using the minimum number of rectangles.
+        /*You are going to build a stone wall. The wall should be straight and N meters long, and its thickness should be constant; however, it should have different heights in different places. The height of the wall is specified by an array H of N positive integers. H[I] is the height of the wall from I to I+1 meters to the right of its left end. In particular, H[0] is the height of the wall's left end and H[N−1] is the height of the wall's right end.
+        The wall should be built of cuboid stone blocks (that is, all sides of such blocks are rectangular). Your task is to compute the minimum number of blocks needed to build the wall.*/
+
+        static void StoneWall()
+        {
+            int[] arr = { 8,8,5,7,9,8,7,4,8 };
+            PrintArr(arr);
+            Console.WriteLine($"StoneWall stones needed : {StoneWallHelper(arr)}");
+        }
+        static int StoneWallHelper(int[] H)
+        {
+
+            var stack = new Stack<int>();
+            var numberBlocks = 0;
+            int len = H.Length;
+
+            foreach(int height in H)
+            {
+                //get maximum at stack top.
+
+                while (MyStackPeek(stack) > height)
+                {
+                    stack.Pop();
+                }
+
+                if (MyStackPeek(stack) != height) {
+                        stack.Push(height);
+                        numberBlocks++;
+                    }
+                
+            }
+
+         
+            return numberBlocks;
+
+        }
+
+        static T MyStackPeek<T>(Stack<T> stack) => stack.Count > 0 ? stack.Peek() : default(T);
+
+
+        /*A zero-indexed array A consisting of N integers is given. The dominator of array A is the value that occurs in more than half of the elements of A.
+          For example, consider array A such that
+          A[0] = 3    A[1] = 4    A[2] =  3
+          A[3] = 2    A[4] = 3    A[5] = -1
+          A[6] = 3    A[7] = 3
+          The dominator of A is 3 because it occurs in 5 out of 8 elements of A (namely in those with indices 0, 2, 4, 6 and 7) and 5 is more than a half of 8.*/
+
+        static void Dominator()
+        {
+            int[] arr = { 3,4,3,2,3,-1,3,3 };
+            PrintArr(arr);
+            Console.WriteLine($"that, given a zero-indexed array A consisting of N integers," +
+                $" returns index of any element of array A in which the dominator of A occurs." +
+                $" The function should return −1 if array A does not have a dominator : {DominatorHelper(arr)}");
+        }
+        static int DominatorHelper(int[] A)
+        {
+            //store in dictionary the number of occurences.
+            Dictionary<int,int> dict = new Dictionary<int, int>();
+
+            foreach (var num in A)
+            {
+                if(dict.TryGetValue(num,out int value))
+                {
+                    dict[num]++;
+                }
+                else
+                {
+                    dict.Add(num, 1);
+                }
+            }
+
+            var dominator = dict.Aggregate((leftPair, rightPair) => leftPair.Value > rightPair.Value ? leftPair : rightPair);
+
+            return (dominator.Value > A.Length / 2) ? Array.IndexOf(A, dominator.Key) : -1;
+            
+        }
+
+    
+
+        #endregion
+
         #region Helper Funcs
         public static void PrintArr(int[] arr) { Console.WriteLine(); arr.ToList().ForEach(item => Console.Write($"[{item}] ")); Console.WriteLine(); }
 
@@ -1775,21 +1980,7 @@ namespace InterView.Questions
             //List<int> randomNumbers = new List<int>();
             int[] randomNumbers = new int[n];
             n--;
-            //Console.WriteLine($"GenerateRandomArrayOfNumbers using Parallel.ForEach n={n}, minValue={minValue}, maxValue ={maxValue}");
-
-            //stopWatch.Start();
-            //Parallel.ForEach(WhileYieldFunc(n, minValue,maxValue), new ParallelOptions() { MaxDegreeOfParallelism=50}, new Action<int>((val) =>
-            //{
-            //    randomNumbers.Add(val);
-            //}));
-            //stopWatch.Stop();
-
-            //Console.WriteLine($"GenerateRandomArrayOfNumbers using Parallel.ForEach took {stopWatch.Elapsed.TotalSeconds} seconds.");
-
-            //randomNumbers.Clear();
-            //stopWatch.Restart();
-
-
+           
             stopWatch.Start();
             Console.WriteLine($"GenerateRandomArrayOfNumbers using normal syntax n={n}, minValue={minValue}, maxValue ={maxValue}");
             Random rnd = new Random();

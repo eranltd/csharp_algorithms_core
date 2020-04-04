@@ -19,33 +19,37 @@ namespace InterView.Questions
             Console.WriteLine($"solution({inValid}) -> {solution(inValid)}");
         }
 
-        public static bool solution(string str)
+        public static int solution(string S)
         {
-            Stack<Char> stack = new Stack<char>();
-            //convert str to array of chars.
+            Stack<Char> stack = new Stack<Char>();
 
-            var charArr = str.ToCharArray();
-            foreach (var chr in charArr)
+            for (int i = 0; i < S.Length; i++)
             {
-                if (isOpenPar(chr))
+                char c = S[i];
+
+                switch (c)
                 {
-                    stack.Push(chr);
+                    case ')':
+                        if (stack.Count == 0 || stack.Pop() != '(')
+                            return 0;
+                        break;
+                    case ']':
+                        if (stack.Count == 0 || stack.Pop() != '[')
+                            return 0;
+                        break;
+                    case '}':
+                        if (stack.Count == 0 || stack.Pop() != '{')
+                            return 0;
+                        break;
+                    default:
+                        stack.Push(c);
+                        break;
                 }
-                else if (isClosePar(chr))
-                    if (stack.Count == 0 || !isOppositePara(stack.Pop(), chr))
-                        return false;
             }
 
-            return stack.Count() == 0 ? true : false;
+            return stack.Count == 1 ? 0 : 1;
+
         }
-
-
-        static bool isOpenPar(Char c) => (c == '(' || c == '{' || c == '[' || c == '<');
-
-        static bool isClosePar(Char c) => (c == ')' || c == '}' || c == ']' || c == '>');
-
-        static bool isOppositePara(Char open, Char close) => (isOpenPar(open) && isClosePar(close));
-
     }
 
     }
